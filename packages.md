@@ -4,7 +4,7 @@ A list of packages to consider for an Arch installation, or a Linux system in ge
 
 Unverified: not sure whether this package helps or not.
 
-Daemon: has a daemon which needs to be enabled
+Daemon: has a daemon that needs to be enabled
 
 ## Base installation
 
@@ -13,15 +13,17 @@ Daemon: has a daemon which needs to be enabled
 | base                | Minimal package set to define a basic Arch Linux installation |                                                              |                |            |                                        |
 | base-devel          | Basic tools to build Arch Linux packages                     | Used when building AUR packages                              |                |            |                                        |
 | linux-lts           | The LTS Linux kernel and modules                             |                                                              |                |            |                                        |
-| linux-lts-headers   | Headers and scripts for building modules for the LTS Linux kernel |                                                              |                |            |                                        |
+| linux-lts-headers   | Headers and scripts for building modules for the LTS Linux kernel |                                                              | x              |            |                                        |
 | linux               | The Linux kernel and modules                                 | Not necessary if linux-lts is installed                      |                |            |                                        |
-| linux-headers       | Headers and scripts for building modules for the Linux kernel | Not necessary if linux-lts-headers is installed              |                |            |                                        |
+| linux-headers       | Headers and scripts for building modules for the Linux kernel | Not necessary if linux-lts-headers is installed              | x              |            |                                        |
 | linux-firmware      | Firmware files for Linux                                     |                                                              |                |            |                                        |
 | grub                | GNU GRand Unified Bootloader (2)                             |                                                              |                |            |                                        |
 | efibootmgr          | Linux user-space application to modify the EFI Boot Manager  |                                                              |                |            |                                        |
 | btrfs-progs         | Btrfs filesystem utilities                                   | Needed to harness the potential of btrfs                     | x              |            |                                        |
 | dosfstools          | DOS filesystem utilities                                     |                                                              | x              |            |                                        |
 | mtools              | A collection of utilities to access MS-DOS disks             |                                                              | x              |            |                                        |
+| amd-ucode           | Microcode update image for AMD CPUs                          | Required if using an AMD CPU. Do refer to https://wiki.archlinux.org/title/Microcode for instructions. |                |            |                                        |
+| intel-ucode         | Microcode update files for Intel CPUs                        | Required if using an Intel CPU. Do refer to https://wiki.archlinux.org/title/Microcode for instructions. |                |            |                                        |
 | sudo                | Give certain users the ability to run some commands as root  |                                                              |                |            |                                        |
 | man-db              | A utility for reading man pages                              |                                                              |                |            |                                        |
 | vim                 | Vi Improved, a highly configurable, improved version of the vi text editor |                                                              |                |            |                                        |
@@ -112,7 +114,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | cinnamon-screensaver  | Screensaver designed to integrate well with the Cinnamon desktop | No need to be manually installed. Comes with the `cinnamon` package. Can be manually activated by running `cinnamon-screensaver-command -l`. |                |            |                                                        |
 | lightdm               | A lightweight display manager                                | Needs to be configured to use the installed greeter. (ref: https://wiki.archlinux.org/title/LightDM#Greeter) |                | x          |                                                        |
 | lightdm-slick-greeter | A slick-looking LightDM greeter                              | Can be directly managed in Cinnamon settings                 |                |            |                                                        |
-| numlockx              |                                                              |                                                              |                |            |                                                        |
+| numlockx              | Turns on the numlock key in X11                              | Can be configured in System Settings -> Administration -> Login Window -> Settings -> Settings -> Activate numlock |                |            |                                                        |
 | gnome-terminal        | The GNOME Terminal Emulator                                  |                                                              |                |            |                                                        |
 | gnome-screenshot      | Take pictures of your screen                                 |                                                              |                |            |                                                        |
 | nautilus              | Default file manager for GNOME                               | Optional replacement for `nemo`                              |                |            |                                                        |
@@ -148,6 +150,16 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 
 
+## Additional `systemd` Units
+
+Enable using `sudo systemctl enable <Name>`.
+
+| Name         | Provided by                     | Description                                  | Comment                                                      | 3rd Party Repo URL |
+| ------------ | ------------------------------- | -------------------------------------------- | ------------------------------------------------------------ | ------------------ |
+| fstrim.timer | util-linux (required by `base`) | Discard unused filesystem blocks once a week | Trims SSD. Do refer to https://wiki.archlinux.org/title/Solid_state_drive, especially verify TRIM support, before proceeding. |                    |
+
+
+
 ## References
 
 https://wiki.archlinux.org
@@ -155,3 +167,4 @@ https://wiki.archlinux.org
 https://gist.github.com/mjkstra/96ce7a5689d753e7a6bdd92cdc169bae
 
 https://www.youtube.com/watch?v=FxeriGuJKTM
+
