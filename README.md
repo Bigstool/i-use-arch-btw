@@ -1,2 +1,4 @@
-# i-use-arch-btw
+# I use Arch btw
+
 Tips and tricks for installing and using Arch
+
