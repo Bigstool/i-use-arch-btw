@@ -1,6 +1,6 @@
 # Arch installation packages list
 
-A list of packages to consider for an Arch installation, or a Linux system in general.
+A list of packages to consider for an Arch Linux installation, or a Linux system in general.
 
 Unverified: not sure whether this package helps or not.
 
@@ -45,7 +45,7 @@ Daemon: has a daemon that needs to be enabled
 | pipewire-jack       | Low-latency audio/video router and processor - JACK replacement |                                                              |                |            |                                        |
 | wireplumber         | Session / policy manager implementation for PipeWire         |                                                              | x              |            |                                        |
 | noto-fonts-cjk      | Google Noto CJK fonts                                        | For displaying Chinese, Japanese, and Korean fonts           |                |            |                                        |
-| yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. |                                                              |                |            | https://aur.archlinux.org/packages/yay |
+| yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. | AUR helpers are not supported by Arch Linux (Ref: https://wiki.archlinux.org/title/AUR_helpers) |                |            | https://aur.archlinux.org/packages/yay |
 
 
 
@@ -113,7 +113,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | cinnamon              | Linux desktop which provides advanced innovative features and a traditional user experience |                                                              |                |            |                                                        |
 | cinnamon-screensaver  | Screensaver designed to integrate well with the Cinnamon desktop | No need to be manually installed. Comes with the `cinnamon` package. Can be manually activated by running `cinnamon-screensaver-command -l`. |                |            |                                                        |
 | lightdm               | A lightweight display manager                                | Needs to be configured to use the installed greeter. (ref: https://wiki.archlinux.org/title/LightDM#Greeter) |                | x          |                                                        |
-| lightdm-slick-greeter | A slick-looking LightDM greeter                              | Can be directly managed in Cinnamon settings                 |                |            |                                                        |
+| lightdm-slick-greeter | A slick-looking LightDM greeter                              | Can be configured in System Settings -> Administration -> Login Window, or using [lightdm-settings](https://aur.archlinux.org/packages/lightdm-settings) |                |            |                                                        |
 | numlockx              | Turns on the numlock key in X11                              | Can be configured in System Settings -> Administration -> Login Window -> Settings -> Settings -> Activate numlock |                |            |                                                        |
 | gnome-terminal        | The GNOME Terminal Emulator                                  |                                                              |                |            |                                                        |
 | gnome-screenshot      | Take pictures of your screen                                 |                                                              |                |            |                                                        |
@@ -132,7 +132,7 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 | Name           | Description                                             | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
 | -------------- | ------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
 | guake          | Drop-down terminal for GNOME                            | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                    |
-| ibus           | Intelligent input bus for Linux/Unix                    | In GNOME, the ibus daemon will be automatically started. For other DE, add a autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
+| ibus           | Intelligent input bus for Linux/Unix                    | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
 | ibus-sunpinyin | IBus Wrapper for sunpinyin                              | `AttributeError: module 'gettext' has no attribute 'bind_textdomain_codeset'`: https://github.com/sunpinyin/sunpinyin/pull/146 |                |            |                    |
 | ibus-anthy     | Japanese input method Anthy IMEngine for IBus Framework |                                                              |                |            |                    |
 
@@ -157,6 +157,16 @@ Enable using `sudo systemctl enable <Name>`.
 | Name         | Provided by                     | Description                                  | Comment                                                      | 3rd Party Repo URL |
 | ------------ | ------------------------------- | -------------------------------------------- | ------------------------------------------------------------ | ------------------ |
 | fstrim.timer | util-linux (required by `base`) | Discard unused filesystem blocks once a week | Trims SSD. Do refer to https://wiki.archlinux.org/title/Solid_state_drive, especially verify TRIM support, before proceeding. |                    |
+
+
+
+## Additional Discouraged Packages
+
+Packages in this section may be included in one or more Arch Linux installation guides, but installation is discouraged here. Take this section with a grain of salt.
+
+| Name       | Description                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
+| ---------- | -------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
+| grub-btrfs | Include btrfs snapshots in GRUB boot options | Snapshots can be writable, hence changes made when booted into a snapshot can persist. Restoring a snapshot when booted into one can update the boot record to point to the booted snapshot instead. |                | x          |                    |
 
 
 
