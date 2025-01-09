@@ -96,13 +96,13 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | gdm                     | Display manager and login screen                             | May black screen when the Nvidia drivers are used. Try switching to `lightdm` if this happens. The `lightdm-slick-greeter` can be configured using [`lightdm-settings`](https://aur.archlinux.org/packages/lightdm-settings) from AUR. See below for more details. |                | x          |                    |
 | gnome-browser-connector | Native browser connector for integration with extensions.gnome.org |                                                              |                |            |                    |
 
-#### Gnome extensions
+#### GNOME extensions
 
-| Name                                         | Description                                                  | Comment               | URL                                                          |
-| -------------------------------------------- | ------------------------------------------------------------ | --------------------- | ------------------------------------------------------------ |
-| Dash to Dock                                 | A dock for the Gnome Shell                                   |                       | https://extensions.gnome.org/extension/307/dash-to-dock/     |
-| AppIndicator and KStatusNotifierItem Support | Adds AppIndicator, KStatusNotifierItem and legacy Tray icons support to the Shell |                       | https://extensions.gnome.org/extension/615/appindicator-support/ |
-| IBus Tweaker                                 | Tweaker of IBus for theme, font, input mode and clipboard history | TODO: guide page url? | https://extensions.gnome.org/extension/2820/ibus-tweaker/    |
+| Name                                         | Description                                                  | Comment                                                     | URL                                                          |
+| -------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- | ------------------------------------------------------------ |
+| Dash to Dock                                 | A dock for the Gnome Shell                                   |                                                             | https://extensions.gnome.org/extension/307/dash-to-dock/     |
+| AppIndicator and KStatusNotifierItem Support | Adds AppIndicator, KStatusNotifierItem and legacy Tray icons support to the Shell |                                                             | https://extensions.gnome.org/extension/615/appindicator-support/ |
+| Customize IBus                               | Tweaker of IBus for theme, font, input mode and clipboard history | Guide: https://github.com/openSUSE/Customize-IBus/tree/main | https://extensions.gnome.org/extension/4112/customize-ibus/  |
 
 ### Cinnamon
 
@@ -129,8 +129,8 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 | Name           | Description                                             | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
 | -------------- | ------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
-| guake          | Drop-down terminal for GNOME                            | TODO: In wayland, create a keyboard shortcut in settings with command `` to enable the shortcut |                |            |                    |
-| ibus           | Intelligent input bus for Linux/Unix                    | TODO: how to enable daemon?                                  |                | x          |                    |
+| guake          | Drop-down terminal for GNOME                            | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                    |
+| ibus           | Intelligent input bus for Linux/Unix                    | In GNOME, the ibus daemon will be automatically started. For other DE, add a autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
 | ibus-sunpinyin | IBus Wrapper for sunpinyin                              | `AttributeError: module 'gettext' has no attribute 'bind_textdomain_codeset'`: https://github.com/sunpinyin/sunpinyin/pull/146 |                |            |                    |
 | ibus-anthy     | Japanese input method Anthy IMEngine for IBus Framework |                                                              |                |            |                    |
 
