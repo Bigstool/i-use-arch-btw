@@ -140,13 +140,13 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 ## Additional CLI/GUI applications
 
-| Name             | Description                                                  | Comment | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                  |
-| ---------------- | ------------------------------------------------------------ | ------- | -------------- | ---------- | --------------------------------------------------- |
-| firefox          | Fast, Private & Safe Web Browser                             |         |                |            |                                                     |
-| neofetch         | A CLI system information tool written in BASH that supports displaying images |         |                |            |                                                     |
-| steam            | Valve's digital software delivery system                     |         |                |            |                                                     |
-| proton-ge-custom | Compatibility tool for Steam Play based on Wine and additional components |         |                |            | https://github.com/GloriousEggroll/proton-ge-custom |
-| carla            | Audio Plugin Host                                            |         |                |            |                                                     |
+| Name             | Description                                                  | Comment      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                  |
+| ---------------- | ------------------------------------------------------------ | ------------ | -------------- | ---------- | --------------------------------------------------- |
+| firefox          | Fast, Private & Safe Web Browser                             |              |                |            |                                                     |
+| neofetch         | A CLI system information tool written in BASH that supports displaying images | Discontinued |                |            |                                                     |
+| steam            | Valve's digital software delivery system                     |              |                |            |                                                     |
+| proton-ge-custom | Compatibility tool for Steam Play based on Wine and additional components |              |                |            | https://github.com/GloriousEggroll/proton-ge-custom |
+| carla            | Audio Plugin Host                                            |              |                |            |                                                     |
 
 
 
