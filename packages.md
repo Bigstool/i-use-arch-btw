@@ -17,7 +17,7 @@ Daemon: has a daemon that needs to be enabled
 | linux               | The Linux kernel and modules                                 | Not necessary if linux-lts is installed                      |                |            |                                        |
 | linux-headers       | Headers and scripts for building modules for the Linux kernel | Not necessary if linux-lts-headers is installed              | x              |            |                                        |
 | linux-firmware      | Firmware files for Linux                                     |                                                              |                |            |                                        |
-| grub                | GNU GRand Unified Bootloader (2)                             |                                                              |                |            |                                        |
+| grub                | GNU GRand Unified Bootloader (2)                             | Add `--removable` option when running `grub-install` to allow for dual booting with Windows or booting on another machine |                |            |                                        |
 | efibootmgr          | Linux user-space application to modify the EFI Boot Manager  |                                                              |                |            |                                        |
 | btrfs-progs         | Btrfs filesystem utilities                                   | Needed to harness the potential of btrfs                     | x              |            |                                        |
 | dosfstools          | DOS filesystem utilities                                     |                                                              | x              |            |                                        |
@@ -177,4 +177,6 @@ https://wiki.archlinux.org
 https://gist.github.com/mjkstra/96ce7a5689d753e7a6bdd92cdc169bae
 
 https://www.youtube.com/watch?v=FxeriGuJKTM
+
+https://wiki.archlinux.org/title/GRUB#Installation
 
