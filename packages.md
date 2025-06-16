@@ -47,6 +47,7 @@ Daemon: has a daemon that needs to be enabled
 | wireplumber         | Session / policy manager implementation for PipeWire         |                                                              | x              |            |                                        |
 | noto-fonts-cjk      | Google Noto CJK fonts                                        | For displaying Chinese, Japanese, and Korean fonts           |                |            |                                        |
 | yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. | AUR helpers are not supported by Arch Linux (Ref: https://wiki.archlinux.org/title/AUR_helpers) |                |            | https://aur.archlinux.org/packages/yay |
+| fuse2               | Interface for userspace programs to export a filesystem to the Linux kernel | Required to run AppImages                                    |                |            |                                        |
 
 
 
