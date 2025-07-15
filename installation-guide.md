@@ -561,15 +561,21 @@ Then, enroll the key again with modified PCR.
 
 ## Optionals
 
+### Post install considerations
+
+Refer to https://barn.bigstool.com/post/server-config/
+
+### Further configurations for pacman
+
+Refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/pacman.md
+
+### Installing and configuring additional packages
+
+Take a further look at https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md
+
 ### TODO: Timeshift snapshots
 
 The unified kernel images are stored in the EFI system partition and will not be included in the Btrfs snapshots. In case of kernel updates, returning to a snapshot with older kernel version would draw the system unbootable (ref: https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points)
-
-
-
-## TODOs
-
-- [ ] Bluetooth service
 
 
 
