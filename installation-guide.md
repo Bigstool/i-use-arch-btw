@@ -545,6 +545,18 @@ $ sudo systemd-cryptenroll /dev/sda2 --wipe-slot=empty --tpm2-device=auto --tpm2
 
 Reboot to see if the drive is automatically unlocked. The installation is complete.
 
+#### On systems without secure boot
+
+(Ref: https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module)
+
+Consider other PCR slots instead of 7. To change the enrolled TPM key, wipe the existing slot first with:
+
+```sh
+$ sudo sudo systemd-cryptenroll /dev/sda2 --wipe-slot=tpm2
+```
+
+Then, enroll the key again with modified PCR.
+
 
 
 ## Optionals
@@ -580,4 +592,6 @@ https://wiki.archlinux.org/title/Unified_kernel_image#mkinitcpio
 https://wiki.archlinux.org/title/Btrfs#Mounting_subvolume_as_root
 
 https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
+
+ChatGPT
 
