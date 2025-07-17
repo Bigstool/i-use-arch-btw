@@ -46,8 +46,10 @@ Daemon: has a daemon that needs to be enabled
 | pipewire-jack       | Low-latency audio/video router and processor - JACK replacement |                                                              |                |            |                                        |
 | wireplumber         | Session / policy manager implementation for PipeWire         |                                                              | x              |            |                                        |
 | noto-fonts-cjk      | Google Noto CJK fonts                                        | For displaying Chinese, Japanese, and Korean fonts           |                |            |                                        |
-| yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. | AUR helpers are not supported by Arch Linux (Ref: https://wiki.archlinux.org/title/AUR_helpers) |                |            | https://aur.archlinux.org/packages/yay |
 | fuse2               | Interface for userspace programs to export a filesystem to the Linux kernel | Required to run AppImages                                    |                |            |                                        |
+| cryptsetup          | Userspace setup tool for transparent encryption of block devices using dm-crypt |                                                              |                |            |                                        |
+| sbctl               | Secure Boot key manager                                      |                                                              |                |            |                                        |
+| yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. | AUR helpers are not supported by Arch Linux (Ref: https://wiki.archlinux.org/title/AUR_helpers) |                |            | https://aur.archlinux.org/packages/yay |
 
 
 
@@ -142,13 +144,14 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 ## Additional CLI/GUI applications
 
-| Name             | Description                                                  | Comment      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                  |
-| ---------------- | ------------------------------------------------------------ | ------------ | -------------- | ---------- | --------------------------------------------------- |
-| firefox          | Fast, Private & Safe Web Browser                             |              |                |            |                                                     |
-| neofetch         | A CLI system information tool written in BASH that supports displaying images | Discontinued |                |            |                                                     |
-| steam            | Valve's digital software delivery system                     |              |                |            |                                                     |
-| proton-ge-custom | Compatibility tool for Steam Play based on Wine and additional components |              |                |            | https://github.com/GloriousEggroll/proton-ge-custom |
-| carla            | Audio Plugin Host                                            |              |                |            |                                                     |
+| Name             | Description                                                  | Comment                    | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                  |
+| ---------------- | ------------------------------------------------------------ | -------------------------- | -------------- | ---------- | --------------------------------------------------- |
+| firefox          | Fast, Private & Safe Web Browser                             |                            |                |            |                                                     |
+| fastfetch        | A feature-rich and performance oriented neofetch like system information tool |                            |                |            |                                                     |
+| steam            | Valve's digital software delivery system                     |                            |                |            |                                                     |
+| proton-ge-custom | Compatibility tool for Steam Play based on Wine and additional components |                            |                |            | https://github.com/GloriousEggroll/proton-ge-custom |
+| qpwgraph         | PipeWire Graph Qt GUI Interface                              | For routing pipewire audio |                |            |                                                     |
+| pavucontrol      | PulseAudio Volume Control                                    |                            |                |            |                                                     |
 
 
 
