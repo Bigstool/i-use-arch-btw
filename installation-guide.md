@@ -230,7 +230,7 @@ Select the mirrors:
 Install packages (for more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md):
 
 ```sh
-# pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator timeshift zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gdm gnome-browser-connector guake ibus ibus-sunpinyin ibus-anthy firefox carla cryptsetup sbctl
+# pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator timeshift zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake ibus ibus-rime ibus-anthy firefox carla cryptsetup sbctl
 ```
 
 ### Fstab

@@ -100,6 +100,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
 | gnome                   | Package group containing the base GNOME desktop and the well-integrated [core applications](https://apps.gnome.org/) |                                                              |                |            |                    |
 | gnome-tweaks            | Graphical interface for advanced GNOME 3 settings (Tweak Tool) |                                                              |                |            |                    |
+| gnome-themes-extra      | Extra Themes for GNOME Applications                          | Enable dark theme for legacy applications by setting `Appearance` > `Legacy Applications` to `Adwaita-dark` in GNOME Tweaks |                |            |                    |
 | gdm                     | Display manager and login screen                             | May black screen when the Nvidia drivers are used. Try switching to `lightdm` if this happens. The `lightdm-slick-greeter` can be configured using [`lightdm-settings`](https://aur.archlinux.org/packages/lightdm-settings) from AUR. See below for more details. |                | x          |                    |
 | gnome-browser-connector | Native browser connector for integration with extensions.gnome.org |                                                              |                |            |                    |
 
@@ -134,12 +135,12 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 ## GUI applications
 
-| Name           | Description                                             | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
-| -------------- | ------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
-| guake          | Drop-down terminal for GNOME                            | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                    |
-| ibus           | Intelligent input bus for Linux/Unix                    | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
-| ibus-sunpinyin | IBus Wrapper for sunpinyin                              | `AttributeError: module 'gettext' has no attribute 'bind_textdomain_codeset'`: https://github.com/sunpinyin/sunpinyin/pull/146 |                |            |                    |
-| ibus-anthy     | Japanese input method Anthy IMEngine for IBus Framework |                                                              |                |            |                    |
+| Name       | Description                                             | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
+| ---------- | ------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
+| guake      | Drop-down terminal for GNOME                            | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                    |
+| ibus       | Intelligent input bus for Linux/Unix                    | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
+| ibus-rime  | Rime input method engine for ibus                       | Switch between Chinese (Traditional) and Chinese (Simplified) with `F4` or ``` Ctrl+` ```. Edit the number of candidates: https://wiki.archlinux.org/title/Rime#Input_candidates |                |            |                    |
+| ibus-anthy | Japanese input method Anthy IMEngine for IBus Framework |                                                              |                |            |                    |
 
 
 
