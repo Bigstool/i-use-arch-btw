@@ -36,7 +36,9 @@ Daemon: has a daemon that needs to be enabled
 | reflector           | A Python 3 module and script to retrieve and filter the latest Pacman mirror list | `reflector --country France --sort rate --save /etc/pacman.d/mirrorlist` |                |            |                                        |
 | cronie              | Daemon that runs specified programs at scheduled times and related tools |                                                              |                | x          |                                        |
 | zram-generator      | Systemd unit generator for zram devices                      | Refer to https://wiki.archlinux.org/title/Zram#Using_zram-generator when configuring. `zram-size` can be set to `ram` to make it as large as the physical memory ([ref](https://fedoraproject.org/wiki/Changes/Scale_ZRAM_to_full_memory_size)). |                | x          |                                        |
-| timeshift           | A system restore utility for Linux                           |                                                              |                |            |                                        |
+| timeshift           | A system restore utility for Linux                           | Timeshift only supports the GRUB2 bootloader. For other bootloaders, consider using `snapper` instead (ref: https://github.com/linuxmint/timeshift). |                |            |                                        |
+| snapper             | A tool for managing BTRFS and LVM snapshots                  |                                                              |                |            |                                        |
+| rsync               | A fast and versatile file copying tool for remote and local files |                                                              |                |            |                                        |
 | zsh                 | A very advanced and programmable command interpreter (shell) for UNIX |                                                              |                |            |                                        |
 | zsh-completions     | Additional completion definitions for Zsh                    |                                                              | x              |            |                                        |
 | zsh-autosuggestions | Fish-like autosuggestions for zsh                            |                                                              | x              |            |                                        |
@@ -135,12 +137,13 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 ## GUI applications
 
-| Name       | Description                                             | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
-| ---------- | ------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
-| guake      | Drop-down terminal for GNOME                            | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                    |
-| ibus       | Intelligent input bus for Linux/Unix                    | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
-| ibus-rime  | Rime input method engine for ibus                       | Switch between Chinese (Traditional) and Chinese (Simplified) with `F4` or ``` Ctrl+` ```. Edit the number of candidates: https://wiki.archlinux.org/title/Rime#Input_candidates |                |            |                    |
-| ibus-anthy | Japanese input method Anthy IMEngine for IBus Framework |                                                              |                |            |                    |
+| Name            | Description                                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                          |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ----------------------------------------------------------- |
+| guake           | Drop-down terminal for GNOME                                 | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                                                             |
+| btrfs-assistant | An application for managing BTRFS subvolumes and Snapper snapshots |                                                              |                |            | https://https://aur.archlinux.org/packages/btrfs-assistant/ |
+| ibus            | Intelligent input bus for Linux/Unix                         | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                                                             |
+| ibus-rime       | Rime input method engine for ibus                            | Switch between Chinese (Traditional) and Chinese (Simplified) with `F4` or ``` Ctrl+` ```. Edit the number of candidates: https://wiki.archlinux.org/title/Rime#Input_candidates |                |            |                                                             |
+| ibus-anthy      | Japanese input method Anthy IMEngine for IBus Framework      |                                                              |                |            |                                                             |
 
 
 

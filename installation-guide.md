@@ -175,7 +175,7 @@ Mount the file system to `/mnt`:
 # mount /dev/mapper/cryptroot /mnt
 ```
 
-Create the subvolumes as desired:
+Create the subvolumes as desired (refer to https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout for other layouts):
 
 ```sh
 # btrfs subvolume create /mnt/@
@@ -184,7 +184,6 @@ Create the subvolumes as desired:
 # btrfs subvolume create /mnt/@pkg
 # btrfs subvolume create /mnt/@tmp
 # btrfs subvolume create /mnt/@snapshots
-# btrfs subvolume create /mnt/@bootbak
 ```
 
 Unmount:
@@ -204,7 +203,7 @@ Mount the root:
 Create the directories to mount to:
 
 ```sh
-# mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,var/tmp,.snapshots,boot,bootbak}
+# mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,var/tmp,.snapshots,boot}
 ```
 
 Mount the rest:
@@ -215,7 +214,6 @@ Mount the rest:
 # mount -o compress=zstd,subvol=@pkg /dev/mapper/cryptroot /mnt/var/cache/pacman/pkg
 # mount -o compress=zstd,subvol=@tmp /dev/mapper/cryptroot /mnt/var/tmp
 # mount -o compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
-# mount -o compress=zstd,subvol=@bootbak /dev/mapper/cryptroot /mnt/bootbak
 # mount /dev/sda1 /mnt/boot
 ```
 
@@ -230,7 +228,7 @@ Select the mirrors:
 Install packages (for more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md):
 
 ```sh
-# pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator timeshift zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake ibus ibus-rime ibus-anthy firefox carla cryptsetup sbctl
+# pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator snapper rsync zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake ibus ibus-rime ibus-anthy firefox carla cryptsetup sbctl
 ```
 
 ### Fstab
@@ -573,9 +571,103 @@ Refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/pacman.md
 
 Take a further look at https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md
 
-### TODO: Timeshift snapshots
+### Configure Snapper snapshots
 
-The unified kernel images are stored in the EFI system partition and will not be included in the Btrfs snapshots. In case of kernel updates, returning to a snapshot with older kernel version would draw the system unbootable (ref: https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points)
+Install Snapper:
+
+```sh
+$ sudo pacman -S snapper
+```
+
+Unmount and remove the `/.snapshots` directory since Snapper assumes that `/.snapshots` is not mounted and does not exist as a folder:
+
+```sh
+$ sudo umount /.snapshots
+$ sudo rm -r /.snapshots
+```
+
+Create a new configuration for `/`:
+
+```sh
+$ sudo snapper -c root create-config /
+```
+
+Delete the subvolume `.snapshots` newly created by Snapper:
+
+```sh
+$ sudo btrfs subvolume delete /.snapshots
+```
+
+Recreate the `/.snapshots` directory:
+
+```sh
+$ sudo mkdir /.snapshots
+```
+
+Mount `@snapshots` to `/.snapshots` utilizing the existing fstab entry:
+
+```sh
+$ sudo mount -a
+```
+
+Verify the mount with:
+
+```sh
+$ findmnt -nt btrfs
+```
+
+Give the folder `750` permissions:
+
+```sh
+$ sudo chmod 750 /.snapshots/
+```
+
+Automatic timeline snapshots is enabled by default with a cron daemon correctly set up. Edit the configurations in `/etc/snapper/configs/root` to liking. For example:
+
+```ini
+TIMELINE_MIN_AGE="1800"
+TIMELINE_LIMIT_HOURLY="5"
+TIMELINE_LIMIT_DAILY="7"
+TIMELINE_LIMIT_WEEKLY="0"
+TIMELINE_LIMIT_MONTHLY="0"
+TIMELINE_LIMIT_YEARLY="0"
+```
+
+#### Backup `/boot`
+
+The unified kernel images are stored in the EFI system partition and will not be included in the Btrfs snapshots. In case of kernel updates, returning to a snapshot with older kernel version would draw the system unbootable (ref: https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points). Therefore, we create a post hook in `mkinitcpio` to make a backup of `/boot` every time the unified kernel image is generated to be later restored with the snapshot.
+
+Create the target directory of backup:
+
+```sh
+$ sudo mkdir /bootbak
+```
+
+Create the following script as `/etc/initcpio/post/bootbackup.sh`:
+
+```sh
+#!/bin/bash
+
+echo "Backing up /boot to /bootbak..."
+rsync -a --delete /boot/ /bootbak/
+echo "Done!"
+```
+
+Give the script permissions to execute:
+
+```sh
+$ sudo chmod +x /etc/initcpio/post/bootbackup.sh
+```
+
+Regenerate initramfs with:
+
+```sh
+$ sudo mkinitcpio -P
+```
+
+TODO: run the post hook after sbctl
+
+### TODO: Restore Snapper snapshots and `/boot`
 
 
 
@@ -600,4 +692,10 @@ https://wiki.archlinux.org/title/Btrfs#Mounting_subvolume_as_root
 https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
 
 ChatGPT
+
+https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout
+
+https://wiki.archlinux.org/title/Mkinitcpio#Post_hooks
+
+
 
