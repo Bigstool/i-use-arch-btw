@@ -441,7 +441,7 @@ editor no
 
 Regenerate initramfs with:
 
-```
+```sh
 # mkinitcpio -P
 ```
 
@@ -569,7 +569,7 @@ Refer to https://barn.bigstool.com/post/server-config/
 
 Refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/pacman.md
 
-### Installing and configuring additional packages
+### Install and configure additional packages
 
 Take a further look at https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md
 
