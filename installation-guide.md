@@ -9,19 +9,19 @@ Btrfs on LUKS, separate EFI partition on `/boot`, GNOME, systemd-boot, TPM2
 Boot the Arch Linux installation image, then configure the console keyboard layout with:
 
 ```sh
-# loadkeys us
+loadkeys us
 ```
 
 Available keys can be listed with:
 
 ```sh
-# localectl list-keymaps
+localectl list-keymaps
 ```
 
 ### Check the boot mode is UEFI
 
 ```sh
-# cat /sys/firmware/efi/fw_platform_size
+cat /sys/firmware/efi/fw_platform_size
 ```
 
 You are in UEFI if the returned value is 64 or 32.
@@ -29,7 +29,7 @@ You are in UEFI if the returned value is 64 or 32.
 ### Check the internet connection
 
 ```sh
-# ping -c 5 archlinux.org
+ping -c 5 archlinux.org
 ```
 
 ### Check the system clock
@@ -37,13 +37,13 @@ You are in UEFI if the returned value is 64 or 32.
 Check that NTP service is active:
 
 ```sh
-# timedatectl
+timedatectl
 ```
 
 **[OPTIONAL]** Set the system to read the RTC time in the local time zone. This is useful when Windows will be run on the same computer:
 
 ```sh
-# timedatectl set-local-rtc 1
+timedatectl set-local-rtc 1
 ```
 
 ### Partition the disk
@@ -66,13 +66,13 @@ The partition layout being used is as follows:
 Find the right disk with:
 
 ```sh
-# fdisk -l
+fdisk -l
 ```
 
 Partition the disk using `/dev/sda` as example:
 
 ```sh
-# fdisk /dev/sda
+fdisk /dev/sda
 ```
 
 Create a new GPT partition table:
@@ -151,20 +151,20 @@ ENTER
 For the EFI system partition:
 
 ```sh
-# mkfs.fat -F 32 /dev/sda1
+mkfs.fat -F 32 /dev/sda1
 ```
 
 For the Linux root partition, first create a LUKS volume with a blank password which will be wiped later$^\text{[verification needed]}$:
 
 ```sh
-# cryptsetup lukeFormat /dev/sda2
-# cryptsetup open /dev/sda2 cryptroot
+cryptsetup lukeFormat /dev/sda2
+cryptsetup open /dev/sda2 cryptroot
 ```
 
 The volume will be available at `/dev/mapper/cryptroot`. Create the Btrfs file system with:
 
 ```sh
-# mkfs.btrfs /dev/mapper/cryptroot
+mkfs.btrfs /dev/mapper/cryptroot
 ```
 
 ### Create subvolumes for the Btrfs file system
@@ -172,24 +172,24 @@ The volume will be available at `/dev/mapper/cryptroot`. Create the Btrfs file s
 Mount the file system to `/mnt`:
 
 ```sh
-# mount /dev/mapper/cryptroot /mnt
+mount /dev/mapper/cryptroot /mnt
 ```
 
 Create the subvolumes as desired (refer to https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout for other layouts):
 
 ```sh
-# btrfs subvolume create /mnt/@
-# btrfs subvolume create /mnt/@home
-# btrfs subvolume create /mnt/@log
-# btrfs subvolume create /mnt/@pkg
-# btrfs subvolume create /mnt/@tmp
-# btrfs subvolume create /mnt/@snapshots
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@log
+btrfs subvolume create /mnt/@pkg
+btrfs subvolume create /mnt/@tmp
+btrfs subvolume create /mnt/@snapshots
 ```
 
 Unmount:
 
 ```sh
-# umount /mnt
+umount /mnt
 ```
 
 ### Mount the file systems and subvolumes
@@ -197,24 +197,24 @@ Unmount:
 Mount the root:
 
 ```sh
-# mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt
+mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt
 ```
 
 Create the directories to mount to:
 
 ```sh
-# mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,var/tmp,.snapshots,boot}
+mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,var/tmp,.snapshots,boot}
 ```
 
 Mount the rest:
 
 ```sh
-# mount -o compress=zstd,subvol=@home /dev/mapper/cryptroot /mnt/home
-# mount -o compress=zstd,subvol=@log /dev/mapper/cryptroot /mnt/var/log
-# mount -o compress=zstd,subvol=@pkg /dev/mapper/cryptroot /mnt/var/cache/pacman/pkg
-# mount -o compress=zstd,subvol=@tmp /dev/mapper/cryptroot /mnt/var/tmp
-# mount -o compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
-# mount /dev/sda1 /mnt/boot
+mount -o compress=zstd,subvol=@home /dev/mapper/cryptroot /mnt/home
+mount -o compress=zstd,subvol=@log /dev/mapper/cryptroot /mnt/var/log
+mount -o compress=zstd,subvol=@pkg /dev/mapper/cryptroot /mnt/var/cache/pacman/pkg
+mount -o compress=zstd,subvol=@tmp /dev/mapper/cryptroot /mnt/var/tmp
+mount -o compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
+mount /dev/sda1 /mnt/boot
 ```
 
 ### Install the system
@@ -222,13 +222,13 @@ Mount the rest:
 Select the mirrors:
 
 ```sh
-# reflector --country <country> --sort rate --save /etc/pacman.d/mirrorlist
+reflector --country <country> --sort rate --save /etc/pacman.d/mirrorlist
 ```
 
 Install packages (for more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md):
 
 ```sh
-# pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator snapper rsync zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake ibus ibus-rime ibus-anthy firefox carla cryptsetup sbctl
+pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator snapper rsync zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake ibus ibus-rime ibus-anthy firefox carla cryptsetup sbctl
 ```
 
 ### Fstab
@@ -236,13 +236,13 @@ Install packages (for more details, refer to https://github.com/Bigstool/i-use-a
 Generate Fstab config w.r.t. how the file systems and subvolumes are mounted now:
 
 ```sh
-# genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
 ### Chroot into the new system
 
 ```sh
-# arch-chroot /mnt
+arch-chroot /mnt
 ```
 
 ### Configure time
@@ -250,13 +250,13 @@ Generate Fstab config w.r.t. how the file systems and subvolumes are mounted now
 Set the timezone:
 
 ```sh
-# ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
 ```
 
 Sync to the hardware clock:
 
 ```sh
-# hwclock --systohc
+hwclock --systohc
 ```
 
 ### Locale and keymap
@@ -264,13 +264,13 @@ Sync to the hardware clock:
 Uncomment the locales that you wish to generate:
 
 ```sh
-# nano /etc/locale.gen
+nano /etc/locale.gen
 ```
 
 Generate the selected locales by:
 
 ```sh
-# locale-gen
+locale-gen
 ```
 
 Set the system language in `/etc/locale.conf`:
@@ -306,19 +306,19 @@ Edit `/etc/hosts` to include the hostname:
 Create a new user in the administration group:
 
 ```sh
-# useradd -mG wheel bigstool
+useradd -mG wheel bigstool
 ```
 
 Create a password for the new user:
 
 ```sh
-# passwd bigstool
+passwd bigstool
 ```
 
 Grant sudo privilege to the new user:
 
 ```sh
-# EDITOR=nano visudo
+EDITOR=nano visudo
 ```
 
 Add the following line under `# User privilege specification`:
@@ -330,9 +330,11 @@ bigstool ALL=(ALL) NOPASSWD: ALL
 Verify that the privilege has been granted:
 
 ```sh
-# su - bigstool
-$ sudo echo hello  # Should print "hello" to the console
-$ exit
+# As root
+su - bigstool
+# As the new user
+sudo echo hello  # Should print "hello" to the console
+exit
 ```
 
 ### Configure the default Btrfs subvolume
@@ -340,7 +342,7 @@ $ exit
 Specifically for the Btrfs file system, find the subvolume ID of the root subvolume of the Btrfs file system with:
 
 ```sh
-# btrfs subvolume list -t /
+btrfs subvolume list -t /
 ```
 
 The output should include something like this:
@@ -356,7 +358,7 @@ The ID of path `@` is what to look for. In this case, it is `256`.
 Change the default subvolume, replace \<id\> with the real value:
 
 ```sh
-# btrfs subvolume set-default <id> /
+btrfs subvolume set-default <id> /
 ```
 
 ### Configure mkinitcpio and unified kernel image
@@ -372,7 +374,7 @@ Pay attention to the items surrounded with \***asterisks**\* and add them **with
 Find the UUID of the encrypted `/dev/sda2` partition with:
 
 ```sh
-# blkid
+blkid
 ```
 
 The output should include something like this:
@@ -384,7 +386,7 @@ The output should include something like this:
 The `UUID` (not the `PARTUUID`) is what to look for. Edit the kernel command line with:
 
 ```sh
-# nano /etc/kernel/cmdline
+nano /etc/kernel/cmdline
 ```
 
 Add the following, then save and exit:
@@ -429,7 +431,7 @@ Additional note: https://wiki.archlinux.org/title/Unified_kernel_image#pacman_ho
 Install the systemd-boot boot loader with:
 
 ```sh
-# bootctl install
+bootctl install
 ```
 
 Optionally, configure the boot loader to display a menu for kernel selection at boot by editing `/boot/loader/loader.conf` (ref: https://wiki.archlinux.org/title/Systemd-boot#Loader_configuration, https://www.freedesktop.org/software/systemd/man/latest/loader.conf.html):
@@ -446,37 +448,39 @@ editor no
 Regenerate initramfs with:
 
 ```sh
-# mkinitcpio -P
+mkinitcpio -P
 ```
 
 Enable services with:
 
 ```sh
-# systemctl enable systemd-resolved systemd-timesyncd NetworkManager ufw sshd cronie gdm
+systemctl enable systemd-resolved systemd-timesyncd NetworkManager ufw sshd cronie gdm
 ```
 
 Exit from chroot:
 
 ```sh
-# exit
+exit
 ```
 
 Sync and unmount everything:
 
 ```sh
-# sync
-# umount -R /mnt
+sync
+umount -R /mnt
 ```
 
 Shut down:
 
 ```sh
-# poweroff
+poweroff
 ```
 
 ### First boot
 
 Try booting the new system. If it works, shut down the PC.
+
+**NOTE**: It is assumed that all shell commands from this point onward are run as the newly created user with sudo privilege.
 
 ### Secure boot
 
@@ -485,13 +489,13 @@ Try booting the new system. If it works, shut down the PC.
 Set secure boot mode to setup mode by booting the PC into firmware setup and clear the secure boot keys, then reboot into the new system. Verify that setup mode is indeed activated with:
 
 ```sh
-$ sbctl status
+sbctl status
 ```
 
 If yes, create the custom secure boot keys:
 
 ```sh
-$ sudo sbctl create-keys
+sudo sbctl create-keys
 ```
 
 Enroll the keys with Microsoft's keys to the UEFI:
@@ -499,38 +503,38 @@ Enroll the keys with Microsoft's keys to the UEFI:
 **NOTE**: Do NOT omit the `-m` flag below, otherwise it might brick the device.
 
 ```sh
-$ sudo sbctl enroll-keys -m
+sudo sbctl enroll-keys -m
 ```
 
 Check the status again, sbctl should be installed now:
 
 ```sh
-$ sbctl status
+sbctl status
 ```
 
 Check what files need to be signed:
 
 ```sh
-$ sudo sbctl verify
+sudo sbctl verify
 ```
 
 Sign all the unsigned files. For example:
 
 ```sh
-$ sudo sbctl sign -s /boot/vmlinuz-linux
-$ sudo sbctl sign -s /boot/EFI/BOOT/BOOTX64.EFI
+sudo sbctl sign -s /boot/vmlinuz-linux
+sudo sbctl sign -s /boot/EFI/BOOT/BOOTX64.EFI
 ```
 
 For systemd-boot, sign the boot loader directly in `/usr/lib` as well (ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Automatic_signing_with_the_pacman_hook):
 
-```
-$ sudo sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
+```sh
+sudo sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
 ```
 
 Reboot with secure boot turned back on in the firmware settings, and check that secure boot is working with:
 
 ```sh
-$ sbctl status
+sbctl status
 ```
 
 ### Enroll TPM
@@ -538,13 +542,13 @@ $ sbctl status
 Create a recovery key:
 
 ```sh
-$ sudo systemd-cryptenroll /dev/sda2 --recovery-key
+sudo systemd-cryptenroll /dev/sda2 --recovery-key
 ```
 
 Enroll the key:
 
 ```sh
-$ sudo systemd-cryptenroll /dev/sda2 --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=7
+sudo systemd-cryptenroll /dev/sda2 --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=7
 ```
 
 Reboot to see if the drive is automatically unlocked. The installation is complete.
@@ -556,7 +560,7 @@ Reboot to see if the drive is automatically unlocked. The installation is comple
 Consider other PCR slots instead of 7. To change the enrolled TPM key, wipe the existing slot first with:
 
 ```sh
-$ sudo sudo systemd-cryptenroll /dev/sda2 --wipe-slot=tpm2
+sudo systemd-cryptenroll /dev/sda2 --wipe-slot=tpm2
 ```
 
 Then, enroll the key again with modified PCR.
@@ -582,50 +586,50 @@ Take a further look at https://github.com/Bigstool/i-use-arch-btw/blob/main/pack
 Install Snapper:
 
 ```sh
-$ sudo pacman -S snapper
+sudo pacman -S snapper
 ```
 
 Unmount and remove the `/.snapshots` directory since Snapper assumes that `/.snapshots` is not mounted and does not exist as a folder:
 
 ```sh
-$ sudo umount /.snapshots
-$ sudo rm -r /.snapshots
+sudo umount /.snapshots
+sudo rm -r /.snapshots
 ```
 
 Create a new configuration for `/`:
 
 ```sh
-$ sudo snapper -c root create-config /
+sudo snapper -c root create-config /
 ```
 
 Delete the subvolume `.snapshots` newly created by Snapper:
 
 ```sh
-$ sudo btrfs subvolume delete /.snapshots
+sudo btrfs subvolume delete /.snapshots
 ```
 
 Recreate the `/.snapshots` directory:
 
 ```sh
-$ sudo mkdir /.snapshots
+sudo mkdir /.snapshots
 ```
 
 Mount `@snapshots` to `/.snapshots` utilizing the existing fstab entry:
 
 ```sh
-$ sudo mount -a
+sudo mount -a
 ```
 
 Verify the mount with:
 
 ```sh
-$ findmnt -nt btrfs
+findmnt -nt btrfs
 ```
 
 Give the folder `750` permissions:
 
 ```sh
-$ sudo chmod 750 /.snapshots/
+sudo chmod 750 /.snapshots/
 ```
 
 Automatic timeline snapshots is enabled by default with a cron daemon correctly set up. Edit the configurations in `/etc/snapper/configs/root` to liking. For example:
@@ -646,7 +650,7 @@ The unified kernel images are stored in the EFI system partition and will not be
 Create the target directory of backup:
 
 ```sh
-$ sudo mkdir /bootbak
+sudo mkdir /bootbak
 ```
 
 Create the following script as `/etc/initcpio/post/bootbackup.sh`:
@@ -662,13 +666,13 @@ echo "Done!"
 Give the script permissions to execute:
 
 ```sh
-$ sudo chmod +x /etc/initcpio/post/bootbackup.sh
+sudo chmod +x /etc/initcpio/post/bootbackup.sh
 ```
 
 Regenerate initramfs with:
 
 ```sh
-$ sudo mkinitcpio -P
+sudo mkinitcpio -P
 ```
 
 TODO: run the post hook after sbctl
@@ -678,13 +682,13 @@ TODO: run the post hook after sbctl
 Install Btrfs Assistant with:
 
 ```sh
-$ yay -Syu btrfs-assistant
+yay -Syu btrfs-assistant
 ```
 
 Create a temporary mount point for the restored root for later restoration of `/boot`:
 
 ```sh
-$ sudo mkdir /newroot
+sudo mkdir /newroot
 ```
 
 ### Restore a Snapper snapshot
@@ -702,19 +706,19 @@ Refer to [Configure the default Btrfs subvolume](#Configure the default Btrfs su
 Mount the new root to `/newroot` with:
 
 ```sh
-$ sudo mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /newroot
+sudo mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /newroot
 ```
 
 Overwrite `/boot` with the one backup included in the snapshot:
 
 ```sh
-$ sudo rsync -a --delete /newroot/bootbak/ /boot
+sudo rsync -a --delete /newroot/bootbak/ /boot
 ```
 
 Unmount:
 
 ```sh
-$ sudo umount /newroot
+sudo umount /newroot
 ```
 
 #### Reboot and verify
@@ -722,13 +726,13 @@ $ sudo umount /newroot
 Reboot:
 
 ```sh
-$ sudo reboot
+sudo reboot
 ```
 
 The system should boot without any problem. After logging in, verify that `/` is indeed mounted with `@` with:
 
 ```sh
-$ findmnt -nt btrfs
+findmnt -nt btrfs
 ```
 
 The output should look something like this:
