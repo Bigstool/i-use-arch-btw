@@ -335,6 +335,30 @@ $ sudo echo hello  # Should print "hello" to the console
 $ exit
 ```
 
+### Configure the default Btrfs subvolume
+
+Specifically for the Btrfs file system, find the subvolume ID of the root subvolume of the Btrfs file system with:
+
+```sh
+# btrfs subvolume list -t /
+```
+
+The output should include something like this:
+
+```
+ID	gen	top level	path	
+--	---	---------	----	
+256	370	5		    @
+```
+
+The ID of path `@` is what to look for. In this case, it is `256`.
+
+Change the default subvolume, replace \<id\> with the real value:
+
+```sh
+# btrfs subvolume set-default <id> /
+```
+
 ### Configure mkinitcpio and unified kernel image
 
 Build a working systemd based initramfs by modifying the `HOOKS` of `/etc/mkinitcpio.conf`:
@@ -357,25 +381,7 @@ The output should include something like this:
 /dev/sda2: UUID="06b34979-42f7-4033-95bd-6587b49191a0" TYPE="crypto_LUKS" PARTUUID="642251ea-aa7c-4a7c-ba49-3e41ccebeb3e"
 ```
 
-The `UUID` (not the `PARTUUID`) is what to look for.
-
-Then, specifically for the Btrfs file system, find the subvolume ID of the root subvolume of the Btrfs file system with:
-
-```sh
-# btrfs subvolume list -t /
-```
-
-The output should include something like this:
-
-```
-ID	gen	top level	path	
---	---	---------	----	
-256	370	5		    @
-```
-
-The ID of path `@` is what to look for.
-
-With the UUID and subvolume ID found, edit the kernel command line with:
+The `UUID` (not the `PARTUUID`) is what to look for. Edit the kernel command line with:
 
 ```sh
 # nano /etc/kernel/cmdline
@@ -384,13 +390,13 @@ With the UUID and subvolume ID found, edit the kernel command line with:
 Add the following, then save and exit:
 
 ```ini
-rd.luks.name=<UUID>=cryptroot root=/dev/mapper/cryptroot rootflags=subvolid=<subvolume-id>
+rd.luks.name=<UUID>=cryptroot root=/dev/mapper/cryptroot
 ```
 
 In the example, it is:
 
 ```ini
-rd.luks.name=06b34979-42f7-4033-95bd-6587b49191a0=cryptroot root=/dev/mapper/cryptroot rootflags=subvolid=256
+rd.luks.name=06b34979-42f7-4033-95bd-6587b49191a0=cryptroot root=/dev/mapper/cryptroot
 ```
 
 Next, edit the `/etc/mkinitcpio.d/linux.preset` and `/etc/mkinitcpio.d/linux-lts.preset` files, comment out the `_image` fields, uncomment the `_uki` and `_options` fields. Then, change the paths of the `.efi` files to `/boot/EFI/...`.
@@ -667,7 +673,71 @@ $ sudo mkinitcpio -P
 
 TODO: run the post hook after sbctl
 
-### TODO: Restore Snapper snapshots and `/boot`
+#### Preparations for restoring snapshots
+
+Install Btrfs Assistant with:
+
+```sh
+$ yay -Syu btrfs-assistant
+```
+
+Create a temporary mount point for the restored root for later restoration of `/boot`:
+
+```sh
+$ sudo mkdir /newroot
+```
+
+### Restore a Snapper snapshot
+
+#### Restore the snapshot
+
+In Btrfs Assisatnt, restore the desired snapshot at Snapper > Browse/Restore.
+
+#### Change the default Btrfs root to the new `@` subvolume
+
+Refer to [Configure the default Btrfs subvolume](#Configure the default Btrfs subvolume). Note that the commands need to be run with `sudo` privilege.
+
+#### Restore `/boot`
+
+Mount the new root to `/newroot` with:
+
+```sh
+$ sudo mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /newroot
+```
+
+Overwrite `/boot` with the one backup included in the snapshot:
+
+```sh
+$ sudo rsync -a --delete /newroot/bootbak/ /boot
+```
+
+Unmount:
+
+```sh
+$ sudo umount /newroot
+```
+
+#### Reboot and verify
+
+Reboot:
+
+```sh
+$ sudo reboot
+```
+
+The system should boot without any problem. After logging in, verify that `/` is indeed mounted with `@` with:
+
+```sh
+$ findmnt -nt btrfs
+```
+
+The output should look something like this:
+
+```
+/                                 /dev/mapper/cryptroot[/@]       btrfs rw,relatime,compress=zstd:3,ssd,space_cache=v2,subvolid=300,subvol=/@
+```
+
+Make sure that `/dev/mapper/cryptroot[/@]` is mounted at `/`.
 
 
 
