@@ -1,6 +1,6 @@
 # Arch Linux installation guide
 
-Btrfs on LUKS, separate EFI partition on `/boot`, GNOME, systemd-boot, TPM2
+Btrfs on LUKS, separate EFI partition on `/efi`, GNOME, systemd-boot, TPM2
 
 ## Essentials
 
@@ -55,7 +55,7 @@ The partition layout being used is as follows:
 | EFI system partition  | LUKS encrypted root partition   |
 |                       |                                 |
 |                       |                                 |
-| /boot                 | /                               |
+| /efi                  | /                               |
 |                       |                                 |
 |                       | /dev/mapper/cryptroot           |
 |                       |---------------------------------|
@@ -203,7 +203,7 @@ mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt
 Create the directories to mount to:
 
 ```sh
-mkdir -p /mnt/{home,var/log,var/cache,var/tmp,.snapshots,boot}
+mkdir -p /mnt/{home,var/log,var/cache,var/tmp,.snapshots,efi}
 ```
 
 Mount the rest:
@@ -214,7 +214,7 @@ mount -o compress=zstd,subvol=@log /dev/mapper/cryptroot /mnt/var/log
 mount -o compress=zstd,subvol=@cache /dev/mapper/cryptroot /mnt/var/cache
 mount -o compress=zstd,subvol=@tmp /dev/mapper/cryptroot /mnt/var/tmp
 mount -o compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
-mount /dev/sda1 /mnt/boot
+mount /dev/sda1 /mnt/efi
 ```
 
 ### Install the system
@@ -401,7 +401,7 @@ In the example, it is:
 rd.luks.name=06b34979-42f7-4033-95bd-6587b49191a0=cryptroot root=/dev/mapper/cryptroot
 ```
 
-Next, edit the `/etc/mkinitcpio.d/linux.preset` and `/etc/mkinitcpio.d/linux-lts.preset` files, comment out the `_image` fields, uncomment the `_uki` and `_options` fields. Then, change the paths of the `.efi` files to `/boot/EFI/...`.
+Next, edit the `/etc/mkinitcpio.d/linux.preset` and `/etc/mkinitcpio.d/linux-lts.preset` files, comment out the `_image` fields, uncomment the `_uki` and `_options` fields. Then, change the paths of the `.efi` files to `/efi/EFI/...`.
 
 As an example, the `linux.preset` file should now look somewhat like this:
 
@@ -415,12 +415,12 @@ PRESETS=('default' 'fallback')
 
 #default_config="/etc/mkinitcpio.conf"
 #default_image="/boot/initramfs-linux.img"
-default_uki="/boot/EFI/Linux/arch-linux.efi"
+default_uki="/efi/EFI/Linux/arch-linux.efi"
 default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
 
 #fallback_config="/etc/mkinitcpio.conf"
 #fallback_image="/boot/initramfs-linux-fallback.img"
-fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
+fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
 fallback_options="-S autodetect"
 ```
 
@@ -434,7 +434,7 @@ Install the systemd-boot boot loader with:
 bootctl install
 ```
 
-Optionally, configure the boot loader to display a menu for kernel selection at boot by editing `/boot/loader/loader.conf` (ref: https://wiki.archlinux.org/title/Systemd-boot#Loader_configuration, https://www.freedesktop.org/software/systemd/man/latest/loader.conf.html):
+Optionally, configure the boot loader to display a menu for kernel selection at boot by editing `/efi/loader/loader.conf` (ref: https://wiki.archlinux.org/title/Systemd-boot#Loader_configuration, https://www.freedesktop.org/software/systemd/man/latest/loader.conf.html):
 
 ```ini
 default @saved
@@ -521,8 +521,8 @@ sudo sbctl verify
 Sign all the unsigned files. For example:
 
 ```sh
-sudo sbctl sign -s /boot/vmlinuz-linux
-sudo sbctl sign -s /boot/EFI/BOOT/BOOTX64.EFI
+sudo sbctl sign -s /efi/EFI/Linux/arch-linux.efi
+sudo sbctl sign -s /efi/EFI/Linux/arch-linux-fallback.efi
 ```
 
 For systemd-boot, sign the boot loader directly in `/usr/lib` as well (ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Automatic_signing_with_the_pacman_hook):
@@ -643,30 +643,30 @@ TIMELINE_LIMIT_MONTHLY="0"
 TIMELINE_LIMIT_YEARLY="0"
 ```
 
-#### Backup `/boot`
+#### Backup `/efi`
 
-The unified kernel images are stored in the EFI system partition and will not be included in the Btrfs snapshots. In case of kernel updates, returning to a snapshot with older kernel version would draw the system unbootable (ref: https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points). Therefore, we create a post hook in `mkinitcpio` to make a backup of `/boot` every time the unified kernel image is generated to be later restored with the snapshot.
+The unified kernel images are stored in the EFI system partition and will not be included in the Btrfs snapshots. In case of kernel updates, returning to a snapshot with older kernel version would draw the system unbootable (ref: https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points). Therefore, we create a post hook in `mkinitcpio` to make a backup of `/efi` every time the unified kernel image is generated to be later restored with the snapshot.
 
 Create the target directory of backup:
 
 ```sh
-sudo mkdir /bootbak
+sudo mkdir /efibak
 ```
 
-Create the following script as `/etc/initcpio/post/bootbackup.sh`:
+Create the following script as `/etc/initcpio/post/efibackup.sh`:
 
 ```sh
 #!/bin/bash
 
-echo "Backing up /boot to /bootbak..."
-rsync -a --delete /boot/ /bootbak/
+echo "Backing up /efi to /efibak..."
+rsync -a --delete /efi/ /efibak/
 echo "Done!"
 ```
 
 Give the script permissions to execute:
 
 ```sh
-sudo chmod +x /etc/initcpio/post/bootbackup.sh
+sudo chmod +x /etc/initcpio/post/efibackup.sh
 ```
 
 Regenerate initramfs with:
@@ -685,7 +685,7 @@ Install Btrfs Assistant with:
 yay -Syu btrfs-assistant
 ```
 
-Create a temporary mount point for the restored root for later restoration of `/boot`:
+Create a temporary mount point for the restored root for later restoration of `/efi`:
 
 ```sh
 sudo mkdir /newroot
@@ -701,7 +701,7 @@ In Btrfs Assisatnt, restore the desired snapshot at Snapper > Browse/Restore.
 
 Refer to [Configure the default Btrfs subvolume](#configure-the-default-btrfs-subvolume). Note that the commands need to be run with `sudo` privilege.
 
-#### Restore `/boot`
+#### Restore `/efi`
 
 Mount the new root to `/newroot` with:
 
@@ -709,10 +709,10 @@ Mount the new root to `/newroot` with:
 sudo mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /newroot
 ```
 
-Overwrite `/boot` with the one backup included in the snapshot:
+Overwrite `/efi` with the backup included in the snapshot:
 
 ```sh
-sudo rsync -a --delete /newroot/bootbak/ /boot
+sudo rsync -a --delete /newroot/efibak/ /efi/
 ```
 
 Unmount:
