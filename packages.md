@@ -113,6 +113,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | Dash to Dock                                 | A dock for the Gnome Shell                                   |                                                             | https://extensions.gnome.org/extension/307/dash-to-dock/     |
 | AppIndicator and KStatusNotifierItem Support | Adds AppIndicator, KStatusNotifierItem and legacy Tray icons support to the Shell |                                                             | https://extensions.gnome.org/extension/615/appindicator-support/ |
 | Customize IBus                               | Tweaker of IBus for theme, font, input mode and clipboard history | Guide: https://github.com/openSUSE/Customize-IBus/tree/main | https://extensions.gnome.org/extension/4112/customize-ibus/  |
+| Native Window Placement                      | Arrange windows in overview in a more compact way.           |                                                             | https://extensions.gnome.org/extension/18/native-window-placement/ |
 
 ### Cinnamon
 
@@ -149,14 +150,15 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 ## Additional CLI/GUI applications
 
-| Name             | Description                                                  | Comment                    | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                  |
-| ---------------- | ------------------------------------------------------------ | -------------------------- | -------------- | ---------- | --------------------------------------------------- |
-| firefox          | Fast, Private & Safe Web Browser                             |                            |                |            |                                                     |
-| fastfetch        | A feature-rich and performance oriented neofetch like system information tool |                            |                |            |                                                     |
-| steam            | Valve's digital software delivery system                     |                            |                |            |                                                     |
-| proton-ge-custom | Compatibility tool for Steam Play based on Wine and additional components |                            |                |            | https://github.com/GloriousEggroll/proton-ge-custom |
-| qpwgraph         | PipeWire Graph Qt GUI Interface                              | For routing pipewire audio |                |            |                                                     |
-| pavucontrol      | PulseAudio Volume Control                                    |                            |                |            |                                                     |
+| Name             | Description                                                  | Comment                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                  |
+| ---------------- | ------------------------------------------------------------ | ---------------------------- | -------------- | ---------- | --------------------------------------------------- |
+| firefox          | Fast, Private & Safe Web Browser                             |                              |                |            |                                                     |
+| fastfetch        | A feature-rich and performance oriented neofetch like system information tool |                              |                |            |                                                     |
+| steam            | Valve's digital software delivery system                     |                              |                |            |                                                     |
+| proton-ge-custom | Compatibility tool for Steam Play based on Wine and additional components |                              |                |            | https://github.com/GloriousEggroll/proton-ge-custom |
+| qpwgraph         | PipeWire Graph Qt GUI Interface                              | For routing pipewire audio   |                |            |                                                     |
+| pavucontrol      | PulseAudio Volume Control                                    |                              |                |            |                                                     |
+| seahorse         | A graphical interface for managing and using    encryption keys, passwords and certificates | Also manages SMB credentials |                |            |                                                     |
 
 
 
