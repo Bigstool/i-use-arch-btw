@@ -699,7 +699,7 @@ In Btrfs Assisatnt, restore the desired snapshot at Snapper > Browse/Restore.
 
 #### Change the default Btrfs root to the new `@` subvolume
 
-Refer to [Configure the default Btrfs subvolume](#Configure the default Btrfs subvolume). Note that the commands need to be run with `sudo` privilege.
+Refer to [Configure the default Btrfs subvolume](#configure-the-default-btrfs-subvolume). Note that the commands need to be run with `sudo` privilege.
 
 #### Restore `/boot`
 
