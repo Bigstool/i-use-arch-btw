@@ -181,7 +181,7 @@ Create the subvolumes as desired (refer to https://wiki.archlinux.org/title/Snap
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
 btrfs subvolume create /mnt/@log
-btrfs subvolume create /mnt/@pkg
+btrfs subvolume create /mnt/@cache
 btrfs subvolume create /mnt/@tmp
 btrfs subvolume create /mnt/@snapshots
 ```
@@ -203,7 +203,7 @@ mount -o compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt
 Create the directories to mount to:
 
 ```sh
-mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,var/tmp,.snapshots,boot}
+mkdir -p /mnt/{home,var/log,var/cache,var/tmp,.snapshots,boot}
 ```
 
 Mount the rest:
@@ -211,7 +211,7 @@ Mount the rest:
 ```sh
 mount -o compress=zstd,subvol=@home /dev/mapper/cryptroot /mnt/home
 mount -o compress=zstd,subvol=@log /dev/mapper/cryptroot /mnt/var/log
-mount -o compress=zstd,subvol=@pkg /dev/mapper/cryptroot /mnt/var/cache/pacman/pkg
+mount -o compress=zstd,subvol=@cache /dev/mapper/cryptroot /mnt/var/cache
 mount -o compress=zstd,subvol=@tmp /dev/mapper/cryptroot /mnt/var/tmp
 mount -o compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
 mount /dev/sda1 /mnt/boot
@@ -742,6 +742,18 @@ The output should look something like this:
 ```
 
 Make sure that `/dev/mapper/cryptroot[/@]` is mounted at `/`.
+
+
+
+## Additional Notes
+
+### On mounting the top-level Btrfs filesystem after installation
+
+```sh
+sudo mount -o subvolid=5 /dev/mapper/cryptroot /mnt
+```
+
+This prevents mounting `@` instead.
 
 
 
