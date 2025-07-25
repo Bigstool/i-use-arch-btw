@@ -157,7 +157,7 @@ mkfs.fat -F 32 /dev/sda1
 For the Linux root partition, first create a LUKS volume with a blank password which will be wiped later$^\text{[verification needed]}$:
 
 ```sh
-cryptsetup lukeFormat /dev/sda2
+cryptsetup luksFormat /dev/sda2
 cryptsetup open /dev/sda2 cryptroot
 ```
 
