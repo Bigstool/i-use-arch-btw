@@ -454,7 +454,7 @@ mkinitcpio -P
 Enable services with:
 
 ```sh
-systemctl enable systemd-resolved systemd-timesyncd NetworkManager ufw sshd cronie gdm
+systemctl enable NetworkManager ufw sshd cronie gdm
 ```
 
 Exit from chroot:
