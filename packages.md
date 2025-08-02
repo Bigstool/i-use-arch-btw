@@ -177,16 +177,6 @@ Enable using `sudo systemctl enable <Name>`.
 
 
 
-## Additional Discouraged Packages
-
-Packages in this section may be included in one or more Arch Linux installation guides, but installation is discouraged here. Take this section with a grain of salt.
-
-| Name       | Description                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
-| ---------- | -------------------------------------------- | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
-| grub-btrfs | Include btrfs snapshots in GRUB boot options | Snapshots can be writable, hence changes made when booted into a snapshot can persist. Restoring a snapshot when booted into one can update the boot record to point to the booted snapshot instead. |                | x          |                    |
-
-
-
 ## References
 
 https://wiki.archlinux.org
