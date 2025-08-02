@@ -117,6 +117,8 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | AppIndicator and KStatusNotifierItem Support | Adds AppIndicator, KStatusNotifierItem and legacy Tray icons support to the Shell |                                                             | https://extensions.gnome.org/extension/615/appindicator-support/ |
 | Customize IBus                               | Tweaker of IBus for theme, font, input mode and clipboard history | Guide: https://github.com/openSUSE/Customize-IBus/tree/main | https://extensions.gnome.org/extension/4112/customize-ibus/  |
 | Native Window Placement                      | Arrange windows in overview in a more compact way.           |                                                             | https://extensions.gnome.org/extension/18/native-window-placement/ |
+| Clipboard Indicator                          | The most popular clipboard manager for GNOME, with over 1M downloads |                                                             | https://extensions.gnome.org/extension/779/clipboard-indicator/ |
+| Desktop Icons NG (DING)                      | Adds icons to the desktop. Fork of the original Desktop Icons extension, with several enhancements. |                                                             | https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/ |
 
 ### Cinnamon
 
