@@ -55,7 +55,7 @@ Daemon: has a daemon that needs to be enabled
 | fuse2               | Interface for userspace programs to export a filesystem to the Linux kernel | Required to run AppImages                                    |                |            |                                        |
 | cryptsetup          | Userspace setup tool for transparent encryption of block devices using dm-crypt |                                                              |                |            |                                        |
 | sbctl               | Secure Boot key manager                                      |                                                              |                |            |                                        |
-| yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. | AUR helpers are not supported by Arch Linux (Ref: https://wiki.archlinux.org/title/AUR_helpers) |                |            | https://aur.archlinux.org/packages/yay |
+| yay                 | Yet another yogurt. Pacman wrapper and AUR helper written in go. | AUR helpers are not supported by Arch Linux (Ref: https://wiki.archlinux.org/title/AUR_helpers). Add the `--aur` flag to target only AUR packages (ref: https://www.reddit.com/r/ManjaroLinux/comments/cst4ou/yay_cache_cleaning/). |                |            | https://aur.archlinux.org/packages/yay |
 
 
 
