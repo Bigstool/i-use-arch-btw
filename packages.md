@@ -164,6 +164,7 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 | qpwgraph         | PipeWire Graph Qt GUI Interface                              | For routing pipewire audio   |                |            |                                                     |
 | pavucontrol      | PulseAudio Volume Control                                    |                              |                |            |                                                     |
 | seahorse         | A graphical interface for managing and using    encryption keys, passwords and certificates | Also manages SMB credentials |                |            |                                                     |
+| mission-center   | Monitor your CPU, Memory, Disk, Network and GPU usage        |                              |                |            |                                                     |
 
 
 
