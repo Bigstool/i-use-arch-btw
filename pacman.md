@@ -118,6 +118,22 @@ Scans the active config files from the pacman database and print the files inste
 
 
 
+## Additional Notes
+
+### Upgrade after a long time (untested)
+
+Check the [Arch Linux News](https://archlinux.org/news/) for required manual intervention.
+
+Make updates in small time skips following https://wiki.archlinux.org/title/Arch_Linux_Archive#How_to_restore_all_packages_to_a_specific_date.
+
+If there are errors about PGP signature, update the keyring first with: (ref: https://www.reddit.com/r/linuxquestions/comments/1adyj27/updating_arch_after_1_year_without_updates_should/)
+
+```sh
+sudo pacman -Sy archlinux-keyring
+```
+
+
+
 ## Further Reading
 
 https://wiki.archlinux.org/title/Pacman
