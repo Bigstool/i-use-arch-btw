@@ -222,8 +222,10 @@ mount /dev/sda1 /mnt/efi
 Select the mirrors:
 
 ```sh
-reflector --country <country> --sort rate --save /etc/pacman.d/mirrorlist
+reflector --country <country> --sort rate --protocol https --save /etc/pacman.d/mirrorlist
 ```
+
+Replace `<country>` with the country/region where the Arch installation is located. For the list of available countries/regions, run `reflector --list-countries`.
 
 Install packages (for more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md):
 
