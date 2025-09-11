@@ -107,7 +107,7 @@ sudo systemctl enable paccache.timer
 Ref: https://wiki.archlinux.org/title/Pacman/Pacnew_and_Pacsave
 
 ```sh
-sudo sudo pacdiff --output --pacmandb
+sudo pacdiff --output --pacmandb
 ```
 
 Scans the active config files from the pacman database and print the files instead of merging them with a merge program.
