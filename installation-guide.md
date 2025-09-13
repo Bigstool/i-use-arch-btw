@@ -541,16 +541,16 @@ sbctl status
 
 ### Enroll TPM
 
-Create a recovery key:
+Create a recovery key, replace `<UUID>` with the one used in [Configure mkinitcpio and unified kernel image](#configure-mkinitcpio-and-unified-kernel-image):
 
 ```sh
-sudo systemd-cryptenroll /dev/sda2 --recovery-key
+sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --recovery-key
 ```
 
 Enroll the key:
 
 ```sh
-sudo systemd-cryptenroll /dev/sda2 --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=7
+sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=7
 ```
 
 Reboot to see if the drive is automatically unlocked. The installation is complete.
