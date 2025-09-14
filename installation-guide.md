@@ -555,7 +555,7 @@ sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-devic
 
 Reboot to see if the drive is automatically unlocked. The installation is complete.
 
-**NOTE**: The combination of PCRs to bind given here is for illustration purpose only and can lead to leakage of the encryption key. Do refer to other sources including https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers and https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module for more information, then choose the combination that works for the particular setup and threat model.
+**NOTE**: The combination of PCRs to bind given here is for illustration purpose only and can lead to leakage of the encryption key. Do refer to other sources including https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/, https://man.archlinux.org/man/systemd-cryptenroll.1 and https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module for more information, then choose the combination that works for the particular setup and threat model.
 
 To change the enrolled TPM key, wipe the existing slot first with:
 
