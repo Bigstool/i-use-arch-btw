@@ -34,6 +34,18 @@ Always perform a full update even if you only want to refresh the package list (
 sudo pacman -S <package_name1> <package_name2> ...
 ```
 
+### Install a package as dependency
+
+```sh
+sudo pacman -S --asdeps <package_name>
+```
+
+Alternatively, to change the installation reason of an already installed package:
+
+```sh
+sudo pacman -D --asdeps <package_name>
+```
+
 ### Remove packages, along with dependencies no longer required and `.pacsave` files
 
 ```sh
@@ -43,18 +55,14 @@ sudo pacman -Rns <package_name1> <package_name2> ...
 ### Search for an already installed package
 
 ```sh
-sudo pacman -Qs <string>
+pacman -Qs <string>
 ```
 
-### Remove cached packages that are not currently installed
+### Get information of an installed package
 
 ```sh
-pacman -Sc
+pacman -Qi <package_name>
 ```
-
-Pacman stores downloaded packages and does not remove old or uninstalled packages automatically, hence it may be desirable to remove the cached packages of uninstalled packages. (ref: https://wiki.archlinux.org/title/Pacman#Cleaning_the_package_cache)
-
-Refer to the `pacman-contrib` section below to remove historical versions of a package from the cache while keeping the latest versions.
 
 ### Check for orphans
 
@@ -62,13 +70,35 @@ Refer to the `pacman-contrib` section below to remove historical versions of a p
 pacman -Qdt
 ```
 
-### Remove orphans
+To remove the orphans:
 
 Ref: https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#Removing_unused_packages_(orphans)
 
 ```sh
 pacman -Qdtq | pacman -Rns -
 ```
+
+### List packages explicitly installed
+
+```sh
+pacman -Qet
+```
+
+### Check to which installed package a file belongs
+
+```sh
+pacman -Qo </path/to/file>
+```
+
+### Remove cached packages that are not currently installed
+
+```sh
+sudo pacman -Sc
+```
+
+Pacman stores downloaded packages and does not remove old or uninstalled packages automatically, hence it may be desirable to remove the cached packages of uninstalled packages. (ref: https://wiki.archlinux.org/title/Pacman#Cleaning_the_package_cache)
+
+Refer to the `pacman-contrib` section below to remove historical versions of a package from the cache while keeping the latest versions.
 
 
 
