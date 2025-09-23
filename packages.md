@@ -143,13 +143,13 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 ## GUI applications
 
-| Name            | Description                                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                          |
-| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ----------------------------------------------------------- |
-| guake           | Drop-down terminal for GNOME                                 | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                                                             |
-| btrfs-assistant | An application for managing BTRFS subvolumes and Snapper snapshots |                                                              |                |            | https://https://aur.archlinux.org/packages/btrfs-assistant/ |
-| ibus            | Intelligent input bus for Linux/Unix                         | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                                                             |
-| ibus-rime       | Rime input method engine for ibus                            | Switch between Chinese (Traditional) and Chinese (Simplified) with `F4` or ``` Ctrl+` ```. Edit the number of candidates: https://wiki.archlinux.org/title/Rime#Input_candidates |                |            |                                                             |
-| ibus-anthy      | Japanese input method Anthy IMEngine for IBus Framework      |                                                              |                |            |                                                             |
+| Name            | Description                                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
+| guake           | Drop-down terminal for GNOME                                 | In wayland, create a keyboard shortcut in settings with command `guake-toggle` to enable the shortcut for toggling `guake` |                |            |                    |
+| btrfs-assistant | An application for managing BTRFS subvolumes and Snapper snapshots |                                                              |                |            |                    |
+| ibus            | Intelligent input bus for Linux/Unix                         | In GNOME, the ibus daemon will be automatically started. For other DE, add an autostart entry with command `ibus-daemon -rxRd`. |                | x          |                    |
+| ibus-rime       | Rime input method engine for ibus                            | Switch between Chinese (Traditional) and Chinese (Simplified) with `F4` or ``` Ctrl+` ```. Edit the number of candidates: https://wiki.archlinux.org/title/Rime#Input_candidates |                |            |                    |
+| ibus-anthy      | Japanese input method Anthy IMEngine for IBus Framework      |                                                              |                |            |                    |
 
 
 
