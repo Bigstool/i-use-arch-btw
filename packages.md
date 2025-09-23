@@ -108,6 +108,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | gnome-themes-extra      | Extra Themes for GNOME Applications                          | Enable dark theme for legacy applications by setting `Appearance` > `Legacy Applications` to `Adwaita-dark` in GNOME Tweaks |                |            |                    |
 | gdm                     | Display manager and login screen                             | May black screen when the Nvidia drivers are used. Try switching to `lightdm` if this happens. The `lightdm-slick-greeter` can be configured using [`lightdm-settings`](https://aur.archlinux.org/packages/lightdm-settings) from AUR. See below for more details. |                | x          |                    |
 | gnome-browser-connector | Native browser connector for integration with extensions.gnome.org |                                                              |                |            |                    |
+| dconf-editor            | GSettings editor for GNOME                                   |                                                              |                |            |                    |
 
 #### GNOME extensions
 
