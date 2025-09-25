@@ -158,6 +158,12 @@ If there are errors about PGP signature, update the keyring first with: (ref: ht
 sudo pacman -Sy archlinux-keyring
 ```
 
+### Manually building a package with a PKGBUILD file
+
+Refer to https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages
+
+To install make dependencies before building and remove them afterwards, use `makepkg -rs` instead.
+
 
 
 ## Further Reading
