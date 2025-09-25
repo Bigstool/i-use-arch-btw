@@ -105,9 +105,10 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ------------------ |
 | gnome                   | Package group containing the base GNOME desktop and the well-integrated [core applications](https://apps.gnome.org/) |                                                              |                |            |                    |
 | gnome-tweaks            | Graphical interface for advanced GNOME 3 settings (Tweak Tool) |                                                              |                |            |                    |
+| gnome-shell-extensions  | Extensions for GNOME shell, including classic mode           |                                                              |                |            |                    |
 | gnome-themes-extra      | Extra Themes for GNOME Applications                          | Enable dark theme for legacy applications by setting `Appearance` > `Legacy Applications` to `Adwaita-dark` in GNOME Tweaks |                |            |                    |
-| gdm                     | Display manager and login screen                             | May black screen when the Nvidia drivers are used. Try switching to `lightdm` if this happens. The `lightdm-slick-greeter` can be configured using [`lightdm-settings`](https://aur.archlinux.org/packages/lightdm-settings) from AUR. See below for more details. |                | x          |                    |
 | gnome-browser-connector | Native browser connector for integration with extensions.gnome.org |                                                              |                |            |                    |
+| seahorse                | A graphical interface for managing and using    encryption keys, passwords and certificates | Also manages SMB credentials                                 |                |            |                    |
 | dconf-editor            | GSettings editor for GNOME                                   |                                                              |                |            |                    |
 
 #### GNOME extensions
@@ -168,7 +169,6 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 | proton-ge-custom          | Compatibility tool for Steam Play based on Wine and additional components |                                                              |                |            | https://github.com/GloriousEggroll/proton-ge-custom          |
 | qpwgraph                  | PipeWire Graph Qt GUI Interface                              | For routing pipewire audio                                   |                |            |                                                              |
 | pavucontrol               | PulseAudio Volume Control                                    |                                                              |                |            |                                                              |
-| seahorse                  | A graphical interface for managing and using    encryption keys, passwords and certificates | Also manages SMB credentials                                 |                |            |                                                              |
 | mission-center            | Monitor your CPU, Memory, Disk, Network and GPU usage        |                                                              |                |            |                                                              |
 
 
