@@ -169,6 +169,8 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 | proton-ge-custom          | Compatibility tool for Steam Play based on Wine and additional components |                                                              |                |            | https://github.com/GloriousEggroll/proton-ge-custom          |
 | qpwgraph                  | PipeWire Graph Qt GUI Interface                              | For routing pipewire audio                                   |                |            |                                                              |
 | pavucontrol               | PulseAudio Volume Control                                    |                                                              |                |            |                                                              |
+| gthumb                    | Image browser and viewer for the GNOME Desktop               | For viewing RAW images                                       |                |            |                                                              |
+| raw-thumbnailer           | A lightweight and fast raw image thumbnailer that can be used by file managers. |                                                              |                |            | https://aur.archlinux.org/packages/raw-thumbnailer           |
 | mission-center            | Monitor your CPU, Memory, Disk, Network and GPU usage        |                                                              |                |            |                                                              |
 
 
