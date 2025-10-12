@@ -6,9 +6,15 @@ Tips and tricks for using the pacman package manager.
 
 ## Configuration
 
-### Retrieve the latest mirrors, sort them by speed, and update `/etc/pacman.d/mirrorlist` using `reflector`
+### Select the mirrors
 
-Refer to the [Select the mirrors](installation-guide.md#install-the-system) part of the installation guide.
+Retrieve the latest mirrors, sort them by speed, and update `/etc/pacman.d/mirrorlist` using `reflector`:
+
+```sh
+reflector --country <country> --sort rate --protocol https --save /etc/pacman.d/mirrorlist
+```
+
+Replace `<country>` with the country/region where the Arch installation is located. For the list of available countries/regions, run `reflector --list-countries`.
 
 ### Enable parallel downloads
 

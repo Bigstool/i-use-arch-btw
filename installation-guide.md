@@ -2,6 +2,8 @@
 
 Btrfs on LUKS, separate EFI partition on `/efi`, GNOME, systemd-boot, TPM2
 
+Before you proceed, you're recommended to refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/installation-guides.md first. Compare and choose a path or a combination of paths suitable for your use case.
+
 ## Essentials
 
 ### Keyboard layout
@@ -219,13 +221,7 @@ mount /dev/sda1 /mnt/efi
 
 ### Install the system
 
-Select the mirrors:
-
-```sh
-reflector --country <country> --sort rate --protocol https --save /etc/pacman.d/mirrorlist
-```
-
-Replace `<country>` with the country/region where the Arch installation is located. For the list of available countries/regions, run `reflector --list-countries`.
+Refer to [Select the mirrors](https://github.com/Bigstool/i-use-arch-btw/blob/main/pacman.md#select-the-mirrors) to configure pacman mirrors.
 
 Install packages (for more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md):
 
@@ -782,6 +778,4 @@ ChatGPT
 https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout
 
 https://wiki.archlinux.org/title/Mkinitcpio#Post_hooks
-
-
 
