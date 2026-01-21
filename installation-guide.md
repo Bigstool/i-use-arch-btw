@@ -42,12 +42,6 @@ Check that NTP service is active:
 timedatectl
 ```
 
-**[OPTIONAL]** Set the system to read the RTC time in the local time zone. This is useful when Windows will be run on the same computer:
-
-```sh
-timedatectl set-local-rtc 1
-```
-
 ### Partition the disk
 
 The partition layout being used is as follows:
@@ -80,72 +74,72 @@ fdisk /dev/sda
 Create a new GPT partition table:
 
 ```
-g
-ENTER
+Command (m for help): g
+
+# Expected output
+Created a new GPT disklabel (GUID: C1BCB28A-66E7-4DE9-89CC-B808E30243B3).
 ```
 
 Create the EFI system partition, allocating 1G of space:
 
 ```
-n
-ENTER
-ENTER
-ENTER
-+1G
-ENTER
-# Change the partition type
-t
-ENTER
+Command (m for help): n
+Partition number (1-128, default 1): <ENTER>
+First sector (2048-468862094, default 2048): <ENTER>
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-468862094, default 468860927): +1G
 
+# Expected output
+Created a new partition 1 of type 'Linux filesystem' and of size 1 GiB.
 ```
 
 Change the partition type to "EFI System":
 
 ```
-t
-ENTER
-1
-ENTER
+Command (m for help): t
+Selected partition 1
+Partition type or alias (type L to list all): 1
+
+# Expected output
+Changed type of partition 'Linux filesystem' to 'EFI System'.
 ```
 
 Create the Linux root partition, allocating all remaining space:
 
 ```
-n
-ENTER
-ENTER
-ENTER
-ENTER
+Command (m for help): n
+Partition number (2-128, default 2): <ENTER>
+First sector (2099200-468862094, default 2099200): <ENTER>
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2099200-468862094, default 468860927): <ENTER>
+
+# Expected output
+Created a new partition 2 of type 'Linux filesystem' and of size 222.6 GiB.
 ```
 
 Change the partition type to "Linux root (x86_64)"
 
 ```
-t
-ENTER
-2
-ENTER
-23
-ENTER
+Command (m for help): t
+Partition number (1,2, default 2): <ENTER>
+Partition type or alias (type L to list all): 23
+
+# Expected output
+Changed type of partition 'Linux filesystem' to 'Linux root (x86-64)'.
 ```
 
 Check the provisional partitions:
 
 ```
-p
-ENTER
+Command (m for help): p
 ```
 
 Save the changes, or discard if you want to start over:
 
 ```
 # To save
-w
-ENTER
+Command (m for help): w
 
 # To discard
-q
-ENTER
+Command (m for help): q
 ```
 
 ### Format the partitions
@@ -156,7 +150,7 @@ For the EFI system partition:
 mkfs.fat -F 32 /dev/sda1
 ```
 
-For the Linux root partition, first create a LUKS volume with a blank password which will be wiped later$^\text{[verification needed]}$:
+For the Linux root partition, create a LUKS volume with a strong password:
 
 ```sh
 cryptsetup luksFormat /dev/sda2
@@ -223,10 +217,10 @@ mount /dev/sda1 /mnt/efi
 
 Refer to [Select the mirrors](https://github.com/Bigstool/i-use-arch-btw/blob/main/pacman.md#select-the-mirrors) to configure pacman mirrors.
 
-Install packages (for more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md):
+Install base packages (for more details, refer to [Packages](https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md)):
 
 ```sh
-pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux linux-headers linux-firmware btrfs-progs dosfstools mtools amd-ucode sudo man-db vim nano networkmanager bluez ufw openssh git reflector cronie zram-generator snapper rsync zsh zsh-completions zsh-autosuggestions pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber noto-fonts-cjk noto-fonts fuse2 gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake ibus ibus-rime ibus-anthy firefox carla cryptsetup sbctl
+pacstrap -K /mnt base base-devel linux-lts linux-lts-headers linux-firmware btrfs-progs dosfstools mtools cryptsetup sudo man-db vim nano cronie networkmanager reflector openssh git
 ```
 
 ### Fstab
@@ -243,13 +237,29 @@ genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 ```
 
+### Install packages
+
+> [!TIP]
+> Take a look at the packages below and make adjustments according to preference and hardware. For example, Intel users should install `intel-ucode` instead of `amd-ucode`. For more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md.
+
+```sh
+pacman -Syu amd-ucode bluez fuse2 zsh pipewire wireplumber rsync noto-fonts-cjk noto-fonts gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake firefox ibus ibus-rime ibus-anthy
+```
+
 ### Configure time
 
 Set the timezone:
 
 ```sh
-ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+ln -sf /usr/share/zoneinfo/<Area>/<Location> /etc/localtime
 ```
+
+> [!TIP]
+> Optionally, set the system to read the RTC time in the local time zone. This is useful when Windows will be run on the same computer:
+>
+> ```sh
+> timedatectl set-local-rtc 1
+> ```
 
 Sync to the hardware clock:
 
@@ -285,7 +295,7 @@ KEYMAP=us
 
 ### Hostname
 
-Put the hostname in the first line of `/etc/hostname`:
+Put the hostname in the first line of `/etc/hostname`. For example, if the desired hostname is `arch`:
 
 ```ini
 arch
@@ -399,27 +409,35 @@ In the example, it is:
 rd.luks.name=06b34979-42f7-4033-95bd-6587b49191a0=cryptroot root=/dev/mapper/cryptroot
 ```
 
-Next, edit the `/etc/mkinitcpio.d/linux.preset` and `/etc/mkinitcpio.d/linux-lts.preset` files, comment out the `_image` fields, uncomment the `_uki` and `_options` fields. Then, change the paths of the `.efi` files to `/efi/EFI/...`.
+Next, edit `/etc/mkinitcpio.d/linux-lts.preset` (or `/etc/mkinitcpio.d/linux.preset` if using the `linux` kernel), comment out the `_image` fields, uncomment the `_uki` and `_options` fields. Then, change the paths of the `.efi` files to `/efi/EFI/...`.
 
-As an example, the `linux.preset` file should now look somewhat like this:
+The `linux-lts.preset` file should now look somewhat like this:
 
 ```ini
-# mkinitcpio preset file for the 'linux' package
+# mkinitcpio preset file for the 'linux-lts' package
 
 #ALL_config="/etc/mkinitcpio.conf"
-ALL_kver="/boot/vmlinuz-linux"
+ALL_kver="/boot/vmlinuz-linux-lts"
+#ALL_kerneldest="/boot/vmlinuz-linux-lts"
 
+#PRESETS=('default')
 PRESETS=('default' 'fallback')
 
 #default_config="/etc/mkinitcpio.conf"
-#default_image="/boot/initramfs-linux.img"
-default_uki="/efi/EFI/Linux/arch-linux.efi"
+#default_image="/boot/initramfs-linux-lts.img"
+default_uki="/efi/EFI/Linux/arch-linux-lts.efi"
 default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
 
 #fallback_config="/etc/mkinitcpio.conf"
-#fallback_image="/boot/initramfs-linux-fallback.img"
-fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
+#fallback_image="/boot/initramfs-linux-lts-fallback.img"
+fallback_uki="/efi/EFI/Linux/arch-linux-lts-fallback.efi"
 fallback_options="-S autodetect"
+```
+
+If the initramfs was generated previously, remove the residual initramfs files in `/boot` as they are no longer relevant with UKI:
+
+```sh
+rm /boot/initramfs-linux-*
 ```
 
 Additional note: https://wiki.archlinux.org/title/Unified_kernel_image#pacman_hook
@@ -452,7 +470,7 @@ mkinitcpio -P
 Enable services with:
 
 ```sh
-systemctl enable NetworkManager sshd cronie gdm
+systemctl enable NetworkManager sshd cronie gdm bluetooth
 ```
 
 Exit from chroot:
@@ -478,13 +496,22 @@ poweroff
 
 Try booting the new system. If it works, shut down the PC.
 
-**NOTE**: It is assumed that all shell commands from this point onward are run as the newly created user with sudo privilege.
+> [!NOTE]
+> It is assumed that all shell commands from this point onward are run as the newly created user with sudo privilege.
 
 ### Secure boot
 
-(Ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Putting_firmware_in_%22Setup_Mode%22, https://man.archlinux.org/man/sbctl.8#USAGE)
+(Ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl)
 
-Set secure boot mode to setup mode by booting the PC into firmware setup and clear the secure boot keys, then reboot into the new system. Verify that setup mode is indeed activated with:
+Install sbctl:
+
+```sh
+sudo pacman -Syu sbctl
+```
+
+Reboot the PC into firmware setup. Under the secure boot settings, put secure boot into enter setup mode by deleting the Platform Key (PK). If this is not possible, delete/clear the secure boot keys. If the firmware offers an "OS type" option, choose Windows instead of other OS, as this setup will be Microsoft secure boot compatible. (ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Putting_firmware_in_%22Setup_Mode%22, https://man.archlinux.org/man/sbctl.8#USAGE)
+
+Boot back into Arch and verify that setup mode is indeed activated with:
 
 ```sh
 sbctl status
@@ -496,13 +523,38 @@ If yes, create the custom secure boot keys:
 sudo sbctl create-keys
 ```
 
+The keys are stored in `/var/lib/sbctl/keys`.
+
 Enroll the keys with Microsoft's keys to the UEFI:
 
-**NOTE**: Do NOT omit the `-m` flag below, otherwise it might brick the device.
+> [!WARNING]
+> Do NOT omit the `-m` flag below, otherwise it might brick the device.
 
 ```sh
-sudo sbctl enroll-keys -m
+sudo sbctl enroll-keys -m -f
 ```
+
+`-m`: Enroll UEFI vendor certificates from Microsoft into the signature database.
+
+`-f`: Enroll signatures from dbDefault, KEKDefault or PKDefault. This is useful if sbctl does not vendor your OEM certificates, or doesn’t include all of them.
+
+> [!TIP]
+> If the command above runs into the following error:
+>
+> ```
+> ‼ File is immutable: /sys/firmware/efi/efivars/KEK-732f2b7e-7013-4e43-be44-d0de168a3d92
+> ‼ File is immutable: /sys/firmware/efi/efivars/db-141c4108-7a45-4de4-929a-4b27d558b59c
+> You need to chattr -i files in efivarfs
+> ```
+>
+> Temporarily remove the immutable flag of the UEFI secure boot variables with:
+>
+> ```sh
+> sudo chattr -i /sys/firmware/efi/efivars/KEK-732f2b7e-7013-4e43-be44-d0de168a3d92
+> sudo chattr -i /sys/firmware/efi/efivars/db-141c4108-7a45-4de4-929a-4b27d558b59c
+> ```
+>
+> Then, try enrolling the keys again.
 
 Check the status again, sbctl should be installed now:
 
@@ -519,9 +571,18 @@ sudo sbctl verify
 Sign all the unsigned files. For example:
 
 ```sh
-sudo sbctl sign -s /efi/EFI/Linux/arch-linux.efi
-sudo sbctl sign -s /efi/EFI/Linux/arch-linux-fallback.efi
+sudo sbctl sign -s /efi/EFI/Linux/arch-linux-lts.efi
+sudo sbctl sign -s /efi/EFI/Linux/arch-linux-lts-fallback.efi
+sudo sbctl sign -s /efi/EFI/BOOT/BOOTX64.EFI
+sudo sbctl sign -s /efi/EFI/systemd/systemd-bootx64.efi
 ```
+
+> [!tip]
+> If an undesired file was accidentally signed, remove the file from the signing database with:
+>
+> ```sh
+> sudo sbctl remove-file /boot/initramfs-linux-lts.img
+> ```
 
 For systemd-boot, sign the boot loader directly in `/usr/lib` as well (ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Automatic_signing_with_the_pacman_hook):
 
@@ -529,7 +590,7 @@ For systemd-boot, sign the boot loader directly in `/usr/lib` as well (ref: http
 sudo sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
 ```
 
-Reboot with secure boot turned back on in the firmware settings, and check that secure boot is working with:
+Reboot, and check that secure boot is working with:
 
 ```sh
 sbctl status
@@ -537,13 +598,7 @@ sbctl status
 
 ### Enroll TPM
 
-Create a recovery key, replace `<UUID>` with the one used in [Configure mkinitcpio and unified kernel image](#configure-mkinitcpio-and-unified-kernel-image):
-
-```sh
-sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --recovery-key
-```
-
-Enroll the key:
+Enroll the key, replace `<UUID>` with the one used in [Configure mkinitcpio and unified kernel image](#configure-mkinitcpio-and-unified-kernel-image):
 
 ```sh
 sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=7
@@ -551,12 +606,13 @@ sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-devic
 
 Reboot to see if the drive is automatically unlocked. The installation is complete.
 
-**NOTE**: The combination of PCRs to bind given here is for illustration purpose only and can lead to leakage of the encryption key. Do refer to other sources including https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/, https://man.archlinux.org/man/systemd-cryptenroll.1 and https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module for more information, then choose the combination that works for the particular setup and threat model.
+> [!WARNING]
+> The combination of PCRs to bind given here is for illustration purpose only and can lead to leakage of the encryption key. Do refer to other sources including https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/, https://man.archlinux.org/man/systemd-cryptenroll.1 and https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module for more information, then choose the combination that works for the particular setup and threat model.
 
 To change the enrolled TPM key, wipe the existing slot first with:
 
 ```sh
-sudo systemd-cryptenroll /dev/sda2 --wipe-slot=tpm2
+sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=tpm2
 ```
 
 Then, enroll the key again with modified PCR.
@@ -579,11 +635,15 @@ Take a further look at https://github.com/Bigstool/i-use-arch-btw/blob/main/pack
 
 ### Configure Snapper snapshots
 
-Install Snapper:
+#### Install Snapper
 
 ```sh
-sudo pacman -S snapper
+sudo pacman -Syu snapper
 ```
+
+#### Configure mount point
+
+Ref: https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout
 
 Unmount and remove the `/.snapshots` directory since Snapper assumes that `/.snapshots` is not mounted and does not exist as a folder:
 
@@ -628,6 +688,8 @@ Give the folder `750` permissions:
 sudo chmod 750 /.snapshots/
 ```
 
+#### Configure automatic snapshots
+
 Automatic timeline snapshots is enabled by default with a cron daemon correctly set up. Edit the configurations in `/etc/snapper/configs/root` to liking. For example:
 
 ```ini
@@ -637,6 +699,14 @@ TIMELINE_LIMIT_DAILY="7"
 TIMELINE_LIMIT_WEEKLY="0"
 TIMELINE_LIMIT_MONTHLY="0"
 TIMELINE_LIMIT_YEARLY="0"
+```
+
+#### GUI helper
+
+Btrfs Assistant is a GUI tool that can manage Btrfs subvolumes and Snapper snapshots. Install Btrfs Assistant with:
+
+```sh
+sudo pacman -Syu btrfs-assistant
 ```
 
 #### Backup `/efi`
@@ -674,12 +744,6 @@ sudo mkinitcpio -P
 TODO: run the post hook after sbctl
 
 #### Preparations for restoring snapshots
-
-Install Btrfs Assistant with:
-
-```sh
-yay -Syu btrfs-assistant
-```
 
 Create a temporary mount point for the restored root for later restoration of `/efi`:
 
@@ -771,11 +835,7 @@ https://wiki.archlinux.org/title/Unified_kernel_image#mkinitcpio
 
 https://wiki.archlinux.org/title/Btrfs#Mounting_subvolume_as_root
 
-https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
-
 ChatGPT
-
-https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout
 
 https://wiki.archlinux.org/title/Mkinitcpio#Post_hooks
 
