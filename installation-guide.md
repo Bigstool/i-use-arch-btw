@@ -525,7 +525,7 @@ sudo sbctl create-keys
 
 The keys are stored in `/var/lib/sbctl/keys`.
 
-Enroll the keys with Microsoft's keys to the UEFI:
+Enroll the keys alongside Microsoft's keys and the OEM firmware's built-in certificates to the UEFI:
 
 > [!WARNING]
 > Do NOT omit the `-m` flag below, otherwise it might brick the device.
@@ -533,10 +533,6 @@ Enroll the keys with Microsoft's keys to the UEFI:
 ```sh
 sudo sbctl enroll-keys -m -f
 ```
-
-`-m`: Enroll UEFI vendor certificates from Microsoft into the signature database.
-
-`-f`: Enroll signatures from dbDefault, KEKDefault or PKDefault. This is useful if sbctl does not vendor your OEM certificates, or doesn’t include all of them.
 
 > [!TIP]
 > If the command above runs into the following error:
@@ -581,7 +577,7 @@ sudo sbctl sign -s /efi/EFI/systemd/systemd-bootx64.efi
 > If an undesired file was accidentally signed, remove the file from the signing database with:
 >
 > ```sh
-> sudo sbctl remove-file /boot/initramfs-linux-lts.img
+> sudo sbctl remove-file <file>
 > ```
 
 For systemd-boot, sign the boot loader directly in `/usr/lib` as well (ref: https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Automatic_signing_with_the_pacman_hook):
@@ -601,13 +597,35 @@ sbctl status
 Enroll the key, replace `<UUID>` with the one used in [Configure mkinitcpio and unified kernel image](#configure-mkinitcpio-and-unified-kernel-image):
 
 ```sh
-sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=7
+sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=0+2+5+7+15:sha256=0000000000000000000000000000000000000000000000000000000000000000
+```
+
+`0`: Core System Firmware executable code (aka Firmware). May change if you upgrade your UEFI.
+
+`2`: Extended or pluggable executable code; includes option ROMs on pluggable hardware.
+
+`5`: GPT/Partition table; changes when the partitions are added, modified, or removed.
+
+`7`: Secure Boot state; changes when UEFI SecureBoot mode is enabled/disabled, or firmware certificates (PK, KEK, db, dbx, ...) changes.
+
+`15`: Root LUKS volume key, machine ID, mount points, file system UUIDs, labels, partition UUIDs; starts being all zero at boot.
+
+> [!WARNING]
+> Only binding to PCRs 0-7 can introduce vulnerabilities. Refer to sources including https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module, https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/, and https://man.archlinux.org/man/systemd-cryptenroll.1 for more information, then choose the combination that works for the particular setup and threat model.
+
+Append the following to `/etc/kernel/cmdline`:
+
+```ini
+rd.luks.options=cryptroot:tpm2-measure-pcr=yes
+```
+
+Regenerate initramfs:
+
+```sh
+sudo mkinitcpio -P
 ```
 
 Reboot to see if the drive is automatically unlocked. The installation is complete.
-
-> [!WARNING]
-> The combination of PCRs to bind given here is for illustration purpose only and can lead to leakage of the encryption key. Do refer to other sources including https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/, https://man.archlinux.org/man/systemd-cryptenroll.1 and https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module for more information, then choose the combination that works for the particular setup and threat model.
 
 To change the enrolled TPM key, wipe the existing slot first with:
 
@@ -838,4 +856,6 @@ https://wiki.archlinux.org/title/Btrfs#Mounting_subvolume_as_root
 ChatGPT
 
 https://wiki.archlinux.org/title/Mkinitcpio#Post_hooks
+
+Doubao
 
