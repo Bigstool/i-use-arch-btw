@@ -170,6 +170,7 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 | gthumb                    | Image browser and viewer for the GNOME Desktop               | For viewing RAW images                                       |                |            |                                                              |
 | raw-thumbnailer           | A lightweight and fast raw image thumbnailer that can be used by file managers. |                                                              |                |            | https://aur.archlinux.org/packages/raw-thumbnailer           |
 | mission-center            | Monitor your CPU, Memory, Disk, Network and GPU usage        |                                                              |                |            |                                                              |
+| meld                      | Compare files, directories and working copies                |                                                              |                |            |                                                              |
 
 
 
