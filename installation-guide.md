@@ -243,7 +243,7 @@ arch-chroot /mnt
 > Take a look at the packages below and make adjustments according to preference and hardware. For example, Intel users should install `intel-ucode` instead of `amd-ucode`. For more details, refer to https://github.com/Bigstool/i-use-arch-btw/blob/main/packages.md.
 
 ```sh
-pacman -Syu amd-ucode bluez fuse2 zsh pipewire wireplumber rsync noto-fonts-cjk noto-fonts gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake firefox ibus ibus-rime ibus-anthy
+pacman -Syu amd-ucode bluez fuse2 zsh pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber rsync noto-fonts-cjk noto-fonts gnome gnome-tweaks gnome-themes-extra gdm gnome-browser-connector guake firefox ibus ibus-rime ibus-anthy
 ```
 
 ### Configure time
