@@ -182,6 +182,9 @@ btrfs subvolume create /mnt/@tmp
 btrfs subvolume create /mnt/@snapshots
 ```
 
+> [!TIP]
+> To list the created subvolumes, use `btrfs subvolume list -t /mnt`.
+
 Unmount:
 
 ```sh
@@ -345,30 +348,6 @@ sudo echo hello  # Should print "hello" to the console
 exit
 ```
 
-### Configure the default Btrfs subvolume
-
-Specifically for the Btrfs file system, find the subvolume ID of the root subvolume of the Btrfs file system with:
-
-```sh
-btrfs subvolume list -t /
-```
-
-The output should include something like this:
-
-```
-ID	gen	top level	path	
---	---	---------	----	
-256	370	5		    @
-```
-
-The ID of path `@` is what to look for. In this case, it is `256`.
-
-Change the default subvolume, replace \<id\> with the real value:
-
-```sh
-btrfs subvolume set-default <id> /
-```
-
 ### Configure mkinitcpio and unified kernel image
 
 Build a working systemd based initramfs by modifying the `HOOKS` of `/etc/mkinitcpio.conf`:
@@ -400,13 +379,13 @@ nano /etc/kernel/cmdline
 Add the following, then save and exit:
 
 ```ini
-rd.luks.name=<UUID>=cryptroot root=/dev/mapper/cryptroot
+rd.luks.name=<UUID>=cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@
 ```
 
 In the example, it is:
 
 ```ini
-rd.luks.name=06b34979-42f7-4033-95bd-6587b49191a0=cryptroot root=/dev/mapper/cryptroot
+rd.luks.name=06b34979-42f7-4033-95bd-6587b49191a0=cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@
 ```
 
 Next, edit `/etc/mkinitcpio.d/linux-lts.preset` (or `/etc/mkinitcpio.d/linux.preset` if using the `linux` kernel), comment out the `_image` fields, uncomment the `_uki` and `_options` fields. Then, change the paths of the `.efi` files to `/efi/EFI/...`.
@@ -775,10 +754,6 @@ sudo mkdir /newroot
 
 In Btrfs Assisatnt, restore the desired snapshot at Snapper > Browse/Restore.
 
-#### Change the default Btrfs root to the new `@` subvolume
-
-Refer to [Configure the default Btrfs subvolume](#configure-the-default-btrfs-subvolume). Note that the commands need to be run with `sudo` privilege.
-
 #### Restore `/efi`
 
 Mount the new root to `/newroot` with:
@@ -825,13 +800,9 @@ Make sure that `/dev/mapper/cryptroot[/@]` is mounted at `/`.
 
 ## Additional Notes
 
-### On mounting the top-level Btrfs filesystem after installation
+### Export the secure boot keys to another installation
 
-```sh
-sudo mount -o subvolid=5 /dev/mapper/cryptroot /mnt
-```
-
-This prevents mounting `@` instead.
+TODO
 
 
 
@@ -858,4 +829,6 @@ ChatGPT
 https://wiki.archlinux.org/title/Mkinitcpio#Post_hooks
 
 Doubao
+
+https://odysee.com/@daimarstein:d/arch-install-guide-tpm-secureboot:e
 
