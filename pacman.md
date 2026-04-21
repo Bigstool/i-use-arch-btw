@@ -81,7 +81,7 @@ To remove the orphans:
 Ref: https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#Removing_unused_packages_(orphans)
 
 ```sh
-pacman -Qdtq | pacman -Rns -
+pacman -Qdtq | sudo pacman -Rns -
 ```
 
 ### List packages explicitly installed
@@ -152,7 +152,7 @@ Scans the active config files using find and prints the files instead of merging
 
 ## Additional Notes
 
-### Upgrade after a long time (untested)
+### Upgrade after a long time
 
 Check the [Arch Linux News](https://archlinux.org/news/) for required manual intervention.
 
