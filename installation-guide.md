@@ -429,6 +429,9 @@ Install the systemd-boot boot loader with:
 bootctl install
 ```
 
+> [!NOTE]
+> If `bootctl` complains about the random seed file being world accessible, edit `/etc/fstab`. Find the entry for `/efi`, and change the values for `fmask` and `dmask` to `0077`. This change will take effect at [First boot](#first-boot).
+
 Optionally, configure the boot loader to display a menu for kernel selection at boot by editing `/efi/loader/loader.conf` (ref: https://wiki.archlinux.org/title/Systemd-boot#Loader_configuration, https://www.freedesktop.org/software/systemd/man/latest/loader.conf.html):
 
 ```ini
