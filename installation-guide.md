@@ -55,7 +55,7 @@ The partition layout being used is as follows:
 |                       |                                 |
 |                       | /dev/mapper/cryptroot           |
 |                       |---------------------------------|
-| /dev/sda1             | /dev/sda2                       |
+| /dev/sdx1             | /dev/sdx2                       |
 +-----------------------+---------------------------------+
 ```
 
@@ -65,10 +65,10 @@ Find the right disk with:
 fdisk -l
 ```
 
-Partition the disk using `/dev/sda` as example:
+Partition the disk using `/dev/sdx` as example:
 
 ```sh
-fdisk /dev/sda
+fdisk /dev/sdx
 ```
 
 Create a new GPT partition table:
@@ -147,14 +147,14 @@ Command (m for help): q
 For the EFI system partition:
 
 ```sh
-mkfs.fat -F 32 /dev/sda1
+mkfs.fat -F 32 /dev/sdx1
 ```
 
 For the Linux root partition, create a LUKS volume with a strong password:
 
 ```sh
-cryptsetup luksFormat /dev/sda2
-cryptsetup open /dev/sda2 cryptroot
+cryptsetup luksFormat /dev/sdx2
+cryptsetup open /dev/sdx2 cryptroot
 ```
 
 The volume will be available at `/dev/mapper/cryptroot`. Create the Btrfs file system with:
@@ -213,7 +213,7 @@ mount -o compress=zstd,subvol=@log /dev/mapper/cryptroot /mnt/var/log
 mount -o compress=zstd,subvol=@cache /dev/mapper/cryptroot /mnt/var/cache
 mount -o compress=zstd,subvol=@tmp /dev/mapper/cryptroot /mnt/var/tmp
 mount -o compress=zstd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots
-mount /dev/sda1 /mnt/efi
+mount /dev/sdx1 /mnt/efi
 ```
 
 ### Install the system
@@ -358,7 +358,7 @@ HOOKS=(base *systemd* autodetect microcode modconf kms *keyboard* *sd-vconsole* 
 
 Pay attention to the items surrounded with \***asterisks**\* and add them **without** the asterisks.
 
-Find the UUID of the encrypted `/dev/sda2` partition with:
+Find the UUID of the encrypted `/dev/sdx2` partition with:
 
 ```sh
 blkid
@@ -367,7 +367,7 @@ blkid
 The output should include something like this:
 
 ```
-/dev/sda2: UUID="06b34979-42f7-4033-95bd-6587b49191a0" TYPE="crypto_LUKS" PARTUUID="642251ea-aa7c-4a7c-ba49-3e41ccebeb3e"
+/dev/sdx2: UUID="06b34979-42f7-4033-95bd-6587b49191a0" TYPE="crypto_LUKS" PARTUUID="642251ea-aa7c-4a7c-ba49-3e41ccebeb3e"
 ```
 
 The `UUID` (not the `PARTUUID`) is what to look for. Edit the kernel command line with:
