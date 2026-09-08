@@ -805,7 +805,39 @@ Make sure that `/dev/mapper/cryptroot[/@]` is mounted at `/`.
 
 ### Export the secure boot keys to another installation
 
-TODO
+On the source installation, make a copy of the `GUID` file and the `keys` directory at `/var/lib/sbctl`.
+
+On the target installation, install sbctl:
+
+```sh
+sudo pacman -Syu sbctl
+```
+
+Create the secure boot keys. This sets up the `/var/lib/sbctl` directory on the target machine. We will overwrite the created files later:
+
+```sh
+sudo sbctl create-keys
+```
+
+Import the keys copied from the source installation:
+
+```sh
+sudo sbctl import-keys --directory /path/to/copied/keys --force
+```
+
+Copy the GUID from the copied GUID file:
+
+```sh
+cat /path/to/copied/GUID
+```
+
+Replace the newly-generated GUID with the copied one, then save and exit:
+
+```sh
+sudo nano /var/lib/sbctl/GUID
+```
+
+Refer to [Secure boot](#secure-boot) to finish the migration. Continue from the "Check what files need to be signed" step, skipping the key enrollment and any prior steps.
 
 
 
@@ -834,4 +866,8 @@ https://wiki.archlinux.org/title/Mkinitcpio#Post_hooks
 Doubao
 
 https://odysee.com/@daimarstein:d/arch-install-guide-tpm-secureboot:e
+
+https://askubuntu.com/questions/1319688/luks-how-can-i-add-more-password-slots-or-remove-change-a-password
+
+https://man.archlinux.org/man/extra/sbctl/sbctl.8.en
 
