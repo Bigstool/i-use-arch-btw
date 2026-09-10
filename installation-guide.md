@@ -574,12 +574,33 @@ Reboot, and check that secure boot is working with:
 sbctl status
 ```
 
-### Enroll TPM
+### TPM
+
+Offload the UKI generation from `mkinitcpio` to `systemd-ukify` by installing the package. This step is required for the configuration of a signed PCR policy using PCR 11:
+
+```sh
+sudo pacman -Syu systemd-ukify
+```
+
+Generate the keys for PCR signing:
+
+```sh
+sudo ukify genkey --pcr-private-key=/etc/systemd/tpm2-pcr-private-key.pem --pcr-public-key=/etc/systemd/tpm2-pcr-public-key.pem
+```
+
+Create the `systemd-ukify` configuration for PCR signing in `/etc/kernel/uki.conf`:
+
+```ini
+[PCRSignature:initrd]
+Phases=enter-initrd
+PCRPrivateKey=/etc/systemd/tpm2-pcr-private-key.pem
+PCRPublicKey=/etc/systemd/tpm2-pcr-public-key.pem
+```
 
 Enroll the key, replace `<UUID>` with the one used in [Configure mkinitcpio and unified kernel image](#configure-mkinitcpio-and-unified-kernel-image):
 
 ```sh
-sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=0+2+5+7+15:sha256=0000000000000000000000000000000000000000000000000000000000000000
+sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-device=auto --tpm2-pcrs=0+2+5+7+15:sha256=0000000000000000000000000000000000000000000000000000000000000000 --tpm2-public-key /etc/systemd/tpm2-pcr-public-key.pem
 ```
 
 `0`: Core System Firmware executable code (aka Firmware). May change if you upgrade your UEFI.
@@ -591,6 +612,8 @@ sudo systemd-cryptenroll /dev/disk/by-uuid/<UUID> --wipe-slot=empty --tpm2-devic
 `7`: Secure Boot state; changes when UEFI SecureBoot mode is enabled/disabled, or firmware certificates (PK, KEK, db, dbx, ...) changes.
 
 `15`: Root LUKS volume key, machine ID, mount points, file system UUIDs, labels, partition UUIDs; starts being all zero at boot.
+
+`--tpm2-public-key`: Configures a signed PCR policy and binds to PCR 11 (Hash of the Unified kernel image) by default.
 
 > [!WARNING]
 > Only binding to PCRs 0-7 can introduce vulnerabilities. Refer to sources including https://wiki.archlinux.org/title/Systemd-cryptenroll#Trusted_Platform_Module, https://wiki.archlinux.org/title/Trusted_Platform_Module#Accessing_PCR_registers, https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/, and https://man.archlinux.org/man/systemd-cryptenroll.1 for more information, then choose the combination that works for the particular setup and threat model.
@@ -857,6 +880,8 @@ https://itsfoss.com/wrong-time-dual-boot/
 
 https://wiki.archlinux.org/title/Unified_kernel_image#mkinitcpio
 
+https://wiki.archlinux.org/title/Unified_kernel_image#ukify
+
 https://wiki.archlinux.org/title/Btrfs#Mounting_subvolume_as_root
 
 ChatGPT
@@ -870,4 +895,16 @@ https://odysee.com/@daimarstein:d/arch-install-guide-tpm-secureboot:e
 https://askubuntu.com/questions/1319688/luks-how-can-i-add-more-password-slots-or-remove-change-a-password
 
 https://man.archlinux.org/man/extra/sbctl/sbctl.8.en
+
+https://blastrock.github.io/posts/fde-tpm-sb-ng/
+
+https://github.com/anatol/booster/blob/1f33490c09d23f35b4ef467c8f1fd0e242364437/docs/manpage.md#tpm2-auto-unlock-and-supplantation-defense
+
+Claude
+
+https://man.archlinux.org/man/ukify.1
+
+https://edu4rdshl.dev/posts/uki-secure-boot-on-archlinux-systemd-boot-walkthrough/
+
+https://man.archlinux.org/man/systemd-cryptenroll.1
 
