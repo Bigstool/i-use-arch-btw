@@ -119,6 +119,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | Clipboard Indicator                          | The most popular clipboard manager for GNOME, with over 1M downloads |                                                             | https://extensions.gnome.org/extension/779/clipboard-indicator/ |
 | Desktop Icons NG (DING)                      | Adds icons to the desktop. Fork of the original Desktop Icons extension, with several enhancements. |                                                             | https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/ |
 | Wiggly                                       | Magnifies the cursor when the mouse is moved rapidly. Fork of [Wiggle](https://extensions.gnome.org/extension/6784/wiggle/). |                                                             | https://extensions.gnome.org/extension/8969/wiggly/          |
+| Tiling Shell                                 | Extend Gnome Shell with advanced tiling window management    |                                                             | https://extensions.gnome.org/extension/7065/tiling-shell/    |
 
 
 
