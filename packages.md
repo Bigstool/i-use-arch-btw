@@ -94,7 +94,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 
 
 
-## Desktop environments
+## Desktop environment
 
 ### GNOME
 
@@ -108,7 +108,7 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | seahorse                | A graphical interface for managing and using    encryption keys, passwords and certificates | Also manages SMB credentials                                 |                |            |                    |
 | dconf-editor            | GSettings editor for GNOME                                   |                                                              |                |            |                    |
 
-#### GNOME extensions
+### GNOME extensions
 
 | Name                                         | Description                                                  | Comment                                                     | URL                                                          |
 | -------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -119,25 +119,6 @@ Do refer to https://wiki.archlinux.org/title/NVIDIA
 | Clipboard Indicator                          | The most popular clipboard manager for GNOME, with over 1M downloads |                                                             | https://extensions.gnome.org/extension/779/clipboard-indicator/ |
 | Desktop Icons NG (DING)                      | Adds icons to the desktop. Fork of the original Desktop Icons extension, with several enhancements. |                                                             | https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/ |
 | Wiggly                                       | Magnifies the cursor when the mouse is moved rapidly. Fork of [Wiggle](https://extensions.gnome.org/extension/6784/wiggle/). |                                                             | https://extensions.gnome.org/extension/8969/wiggly/          |
-
-### Cinnamon
-
-| Name                  | Description                                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                     |
-| --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ------------------------------------------------------ |
-| cinnamon              | Linux desktop which provides advanced innovative features and a traditional user experience |                                                              |                |            |                                                        |
-| cinnamon-screensaver  | Screensaver designed to integrate well with the Cinnamon desktop | No need to be manually installed. Comes with the `cinnamon` package. Can be manually activated by running `cinnamon-screensaver-command -l`. |                |            |                                                        |
-| lightdm               | A lightweight display manager                                | Needs to be configured to use the installed greeter. (ref: https://wiki.archlinux.org/title/LightDM#Greeter) |                | x          |                                                        |
-| lightdm-slick-greeter | A slick-looking LightDM greeter                              | Can be configured in System Settings -> Administration -> Login Window, or using [lightdm-settings](https://aur.archlinux.org/packages/lightdm-settings) |                |            |                                                        |
-| numlockx              | Turns on the numlock key in X11                              | Can be configured in System Settings -> Administration -> Login Window -> Settings -> Settings -> Activate numlock |                |            |                                                        |
-| gnome-terminal        | The GNOME Terminal Emulator                                  |                                                              |                |            |                                                        |
-| gnome-screenshot      | Take pictures of your screen                                 |                                                              |                |            |                                                        |
-| nautilus              | Default file manager for GNOME                               | Optional replacement for `nemo`                              |                |            |                                                        |
-| mint-l-icons          | A flat, colorful, and modern theme based on Paper and Moka (legacy) |                                                              |                |            | https://aur.archlinux.org/packages/mint-l-icons        |
-| mint-l-theme          | A collection of legacy mint themes                           |                                                              |                |            | https://aur.archlinux.org/packages/mint-l-theme        |
-| bibata-cursor-theme   | Material Based Cursor Theme                                  |                                                              |                |            | https://aur.archlinux.org/packages/bibata-cursor-theme |
-| plank                 | Elegant, simple, clean dock                                  |                                                              |                |            |                                                        |
-
-Workaround for `Super + Space` shortcut doesn't work at first press: https://github.com/ibus/ibus/issues/2474
 
 
 
