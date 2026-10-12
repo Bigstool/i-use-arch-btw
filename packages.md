@@ -68,7 +68,7 @@ Uncomment the `[multilib]` section in `/etc/pacman.conf` then `pacman -Syu`
 
 ## Graphics drivers
 
-https://wiki.archlinux.org/title/Xorg#Driver_installation
+Ref: https://wiki.archlinux.org/title/Graphics_processing_unit
 
 ### AMD
 
@@ -158,7 +158,6 @@ Workaround for `Super + Space` shortcut doesn't work at first press: https://git
 
 | Name                      | Description                                                  | Comment                                                      | Unverified (x) | Daemon (x) | 3rd Party Repo URL                                           |
 | ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- | ---------- | ------------------------------------------------------------ |
-| xorg-server               | Xorg X server                                                | For using Xorg instead of Wayland backend                    |                |            |                                                              |
 | firefox                   | Fast, Private & Safe Web Browser                             |                                                              |                |            |                                                              |
 | fastfetch                 | A feature-rich and performance oriented neofetch like system information tool |                                                              |                |            |                                                              |
 | steam                     | Valve's digital software delivery system                     |                                                              |                |            |                                                              |
